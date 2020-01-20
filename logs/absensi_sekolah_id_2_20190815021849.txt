@@ -1,0 +1,21 @@
+----------------------------244859796901127554044515
+Content-Disposition: form-data; name="USERID"
+
+5367
+----------------------------244859796901127554044515
+Content-Disposition: form-data; name="CHECKTIME"
+
+08/05/2019 06:23:51
+----------------------------244859796901127554044515
+Content-Disposition: form-data; name="CHECKTYPE"
+
+I
+----------------------------244859796901127554044515
+Content-Disposition: form-data; name="VERIFYCODE"
+
+0
+----------------------------244859796901127554044515
+Content-Disposition: form-data; name="SENSORID"
+
+1
+----------------------------244859796901127554044515--

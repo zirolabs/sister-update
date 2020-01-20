@@ -1,0 +1,10 @@
+Array
+(
+    [0] => stdClass Object
+        (
+            [lat] => -8.4295087
+            [lon] => 114.3243005
+            [device_id] => aa288a4e15627456
+        )
+
+)

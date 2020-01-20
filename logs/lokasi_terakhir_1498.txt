@@ -1,0 +1,6 @@
+Array
+(
+    [lokasi_latitude] => -8.5498251
+    [lokasi_longitude] => 114.3294424
+    [lokasi_waktu] => 2019-09-11 16:55:04
+)

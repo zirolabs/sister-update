@@ -1,0 +1,26 @@
+{
+    "name"          : "candraekas/kokamengine",
+    "description"   : "Base / Framework KoderKampung untuk membangun aplikasi",
+    "type"          : "project",
+    "require"       : {
+        "codeigniter/framework"             : "^3.1",
+        "almasaeed2010/adminlte"            : "^2.3",
+        "eternicode/bootstrap-datepicker"   : "^1.6",
+        "eonasdan/bootstrap-datetimepicker" : "^4.17",
+        "summernote/summernote"             : "^0.8.2",
+        "fortawesome/font-awesome"          : "^4.7",
+        "smsgatewayme/client"               : "^0.0.1"
+    },
+    "repositories"  : [
+        {
+            "type": "git",
+            "url": "https://github.com/smsgatewayme/client-php.git"
+        }
+    ],
+    "authors"       : [
+        {
+            "name"  : "M. Candra Eka Saputra",
+            "email" : "candraekas@gmail.com"
+        }
+    ]
+}
