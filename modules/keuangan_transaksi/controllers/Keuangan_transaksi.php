@@ -108,6 +108,74 @@ class Keuangan_transaksi extends CI_Controller
 		redirect('keuangan_transaksi');
 	}
 
+	public function submitqr()
+	{
+		$data_post = $this->input->post();
+		$this->form_validation->set_rules('nis', 'QR Code', 'required');
+		$this->form_validation->set_rules('nominal', 'Nominal', 'required');
+		if($this->form_validation->run() == false)
+		{
+			$this->session->set_flashdata('msg', err_msg(validation_errors()));
+			$this->session->set_flashdata('last_data', $data_post);
+		}
+		else
+		{
+			$param_cek_nis	= array('nis'	=> $data_post['nis']);
+			$cek_nis		= $this->keuangan_rfid_model->get_data_nis($param_cek_nis)->row(); 
+			if(empty($cek_nis))
+			{
+				$this->session->set_flashdata('msg', err_msg('QR Code belum terdaftar.'));
+				$this->session->set_flashdata('last_data', $data_post);
+			}
+			else
+			{
+				$this->load->model('keuangan_master/keuangan_master_model');
+				$data_master = $this->keuangan_master_model->get_data_row($data_post['master_id']);
+				if($data_master->operasi == 'debit')
+				{
+					$this->load->model('keuangan_mutasi/keuangan_mutasi_model');
+					$sisa_saldo  = $this->keuangan_mutasi_model->get_saldo_by_nis($data_post['nis']);
+					if($sisa_saldo < $data_post['nominal'])
+					{
+						$this->session->set_flashdata('msg', err_msg('Sisa saldo tidak mencukupi.'));
+						redirect('keuangan_transaksi');
+						exit;
+					}
+				}
+
+				$data_post['jenis']		 = $data_master->operasi;
+				if(!empty($data_post['keterangan']))
+				{
+					$data_post['keterangan'] = $data_master->nama . '. Keterangan : ' . $data_post['keterangan'];									
+				}
+				else
+				{
+					$data_post['keterangan'] = $data_master->nama;				
+				}
+
+				$param_db = array(
+					'user_id'		=> $cek_nis->user_id,
+					'master_id'		=> $data_post['master_id'],
+					'jenis'			=> $data_post['jenis'],
+					'nominal'		=> $data_post['nominal'],
+					'keterangan'	=> $data_post['keterangan'],
+					'waktu'			=> date('Y-m-d H:i:s')
+				);
+
+				$proses = $this->keuangan_mutasi_model->insert($param_db);
+				if($proses)
+				{
+					$this->session->set_flashdata('msg', suc_msg('Data transaksi berhasil disimpan.'));
+				}
+				else
+				{
+					$this->session->set_flashdata('msg', err_msg('Data transaksi gagal disimpan. Silahkan ulangi lagi.'));
+				}				
+			}
+		}
+		redirect('keuangan_transaksi');
+	}
+
 	function ajax_pemilik_kartu()
 	{
 		$respon = array('status'	=> '201');
@@ -128,6 +196,34 @@ class Keuangan_transaksi extends CI_Controller
 						'kelas'			=> $get_data->kelas,
 						'sekolah'		=> $get_data->sekolah,
 						'sisa_saldo'	=> format_rupiah($sisa_saldo)
+					)
+				);
+			}
+		}
+
+		echo json_encode($respon);
+	}
+
+	function ajax_pemilik_nis()
+	{
+		$respon = array('status'	=> '201');
+
+		$kode = $this->input->post('kode');
+		if(!empty($kode))
+		{
+			$get_data = $this->keuangan_rfid_model->get_data_nis(array('nis' => $kode))->row();
+			if(!empty($get_data))
+			{
+				$this->load->model('keuangan_mutasi/keuangan_mutasi_model');
+				$sisa_saldo = $this->keuangan_mutasi_model->get_saldo_by_nis($kode);
+				$respon = array(
+					'status'	=> '200',
+					'data'		=> array(
+					'nama'			=> $get_data->nama_siswa,
+					'nis'			=> $get_data->nis,
+					'kelas'			=> $get_data->kelas,
+					'sekolah'		=> $get_data->sekolah,
+					'sisa_saldo'	=> format_rupiah($sisa_saldo)
 					)
 				);
 			}

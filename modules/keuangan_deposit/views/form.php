@@ -1,6 +1,5 @@
 <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 
-
 <div class="row">
 	<div class="col-md-6 col-md-offset-3">
         <div class="box box-primary">
@@ -19,7 +18,7 @@
             <div class="tab-content">
               <div class="tab-pane" id="tab_1">
 			  <!-- Deposit dengan RFID -->
-			  <form class="form-horizontal formrf" method="POST" action="<?=site_url('keuangan_deposit/submit/')?>" enctype="multipart/form-data">
+			  <form class="form-horizontal formrfid" method="POST" action="<?=site_url('keuangan_deposit/submit/')?>" enctype="multipart/form-data">
 					<div class="box-body">
 						<div class="form-group">
 							<label class="col-md-3 control-label">Jenis</label>
@@ -240,7 +239,7 @@
 		}
 		else
 		{
-			$('.form-horizontal').submit();
+			$('.formrfid').submit();
 		}
 	}	
 
@@ -280,7 +279,7 @@
 		}
 		else
 		{
-			$('.form-horizontal').submit();
+			$('.formqr').submit();
 		}
 	}
 	
