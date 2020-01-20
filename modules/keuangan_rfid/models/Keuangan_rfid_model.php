@@ -16,7 +16,8 @@ class Keuangan_rfid_model extends CI_Model
 		$this->db->join('master_kelas c', 'c.kelas_id = a.kelas_id');
 		$this->db->join('master_jurusan d', 'd.jurusan_id = c.jurusan_id');
 		$this->db->join('profil_sekolah e', 'e.sekolah_id = a.sekolah_id');
-		$this->db->where('a.sn_rfid != ', '');
+		$this->db->where('a.sn_rfid !=','');
+		$this->db->or_where('a.status_qr !=','');
 		
 
 		if(!empty($param))

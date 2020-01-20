@@ -54,6 +54,7 @@
                         <th class="col-md-2">Kelas</th>
                         <th class="col-md-2">NIS</th>
                         <th class="col-md-2">Nama</th>
+                        <th class="col-md-2">Status Aktivasi</th>
                         <th class="col-md-2">SN Kartu</th>
 					</tr>
 				</thead>
@@ -73,6 +74,17 @@
                                 <td><?=$c->kelas?></td>
                                 <td><?=$c->nis?></td>
 								<td><?=$c->nama_siswa?></td>
+                                <td>
+                                    <?php 
+                                        if(!empty($c->sn_rfid)&&!empty($c->status_qr)){
+                                            echo 'RFID & QR Code';
+                                        }elseif (!empty($c->sn_rfid)){
+                                            echo 'RFID';
+                                        }elseif (!empty($c->status_qr)){
+                                            echo 'QR Code';
+                                        }
+                                    ?>
+                                </td>
                                 <td><?=$c->sn_rfid?></td>
 							</tr>
 						<?php endforeach; ?>

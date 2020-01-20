@@ -27,7 +27,7 @@
 			<div class="tab-content">
               <div class="tab-pane" id="tab_1">
 				<!-- Registrasi dengan RFID -->
-					<form class="form-horizontal" method="POST" action="<?=site_url('keuangan_rfid/submit/' . $id)?>" enctype="multipart/form-data">
+					<form class="form-horizontal form1" method="POST" action="<?=site_url('keuangan_rfid/submit/' . $id)?>" enctype="multipart/form-data">
 						<div class="box-body">
 							
 							<div class="form-group">
@@ -88,7 +88,7 @@
 			   </div>
 			   <div class="tab-pane active" id="tab_2">
 			   	<!-- Registrasi dengan QR Code -->
-			   		<form class="form-horizontal" method="POST" action="<?=site_url('keuangan_rfid/submitqr/' . $id)?>" enctype="multipart/form-data">
+			   		<form class="form-horizontal form2" method="POST" action="<?=site_url('keuangan_rfid/submitqr/' . $id)?>" enctype="multipart/form-data">
 						<div class="box-body">
 							<div class="form-group">
 								<label class="col-md-2 control-label">Sekolah</label>
@@ -281,7 +281,7 @@
 						$('input[name="sn_rfid"]').val($input.val());
 						$('#modal-rfid').modal('hide');		  
 						setTimeout(function(){
-							$('.form-horizontal').submit();
+							$('.form1').submit();
 						}, 1000);			
 		  			}
 		  		}, rfidDoneInterval);
@@ -295,7 +295,7 @@
 
 	function openModalQR()
 	{	
-		$('.form-horizontal').submit();
+		$('.form2').submit();
 	}
 
 	// Source code menampilkan NIS menjadi QR Qode
