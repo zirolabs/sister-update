@@ -1,4 +1,5 @@
 /**
+ * Ini adalah JS untuk menampilkan NIS menjadi QR Code
  * @fileoverview
  * - Using the 'QRCode for Javascript library'
  * - Fixed dataset of 'QRCode for Javascript library' for support full-spec.
