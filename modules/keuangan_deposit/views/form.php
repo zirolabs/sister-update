@@ -19,7 +19,7 @@
             <div class="tab-content">
               <div class="tab-pane" id="tab_1">
 			  <!-- Deposit dengan RFID -->
-			  <form class="form-horizontal" method="POST" action="<?=site_url('keuangan_deposit/submit/')?>" enctype="multipart/form-data">
+			  <form class="form-horizontal formrf" method="POST" action="<?=site_url('keuangan_deposit/submit/')?>" enctype="multipart/form-data">
 					<div class="box-body">
 						<div class="form-group">
 							<label class="col-md-3 control-label">Jenis</label>
@@ -72,7 +72,7 @@
 							</tbody>
 						</table>				    
 					</div>
-					<div class="box-footer text-right">
+					<div class="box-footer box1 text-right">
 						<a href="<?=site_url('keuangan_deposit')?>" class="btn btn-default">Reset</a>
 						<button type="button" class="btn btn-primary btn1" onclick="openModalRFID()">Scan RFID</button>
 					</div>
@@ -81,7 +81,7 @@
               <!-- /.tab-pane -->
               <div class="tab-pane active" id="tab_2">
 			  <!-- Deposit dengan QR Code -->
-				<form class="form-horizontal" method="POST" action="<?=site_url('keuangan_deposit/submitnis/')?>" enctype="multipart/form-data">
+				<form class="form-horizontal formqr" method="POST" action="<?=site_url('keuangan_deposit/submitnis/')?>" enctype="multipart/form-data">
 					<div class="box-body">
 						<div class="form-group">
 							<label class="col-md-3 control-label">Jenis</label>
@@ -134,7 +134,7 @@
 							</tbody>
 						</table>				    
 					</div>
-					<div class="box-footer text-right">
+					<div class="box-footer box2 text-right">
 						<a href="<?=site_url('keuangan_deposit')?>" class="btn btn-default">Reset</a>
 						<button type="button" class="btn btn-primary btn2" onclick="openModalQRCode()">Scan QRCode</button>
 					</div>
@@ -330,8 +330,8 @@
 						$('.info_sekolah').html(resp.data.sekolah);
 						$('.info_saldo').html(resp.data.sisa_saldo);
 
-						$('.box-footer button').html('Lanjutkan');		  				
-						$('.box-footer button').attr('class', 'btn btn-success btn1');		  										
+						$('.box1 button').html('Lanjutkan');		  				
+						$('.box1 button').attr('class', 'btn btn-success btn1');		  										
 					}
 				}
 			});
@@ -365,8 +365,8 @@
 						$('.info_sekolah').html(resp.data.sekolah);
 						$('.info_saldo').html(resp.data.sisa_saldo);
 
-						$('.box-footer button').html('Lanjutkan');		  				
-						$('.box-footer button').attr('class', 'btn btn-success btn2');		  										
+						$('.box2 button').html('Lanjutkan');		  				
+						$('.box2 button').attr('class', 'btn btn-success btn2');		  										
 					}
 				}
 			});

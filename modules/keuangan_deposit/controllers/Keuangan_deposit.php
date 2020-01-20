@@ -116,7 +116,7 @@ class Keuangan_deposit extends CI_Controller
 			else
 			{
 				$param_db = array(
-					'user_id'		=> $cek_rfid->user_id,
+					'user_id'		=> $cek_nis->user_id,
 					'jenis'			=> $data_post['jenis'],
 					'nominal'		=> $data_post['nominal'],
 					'keterangan'	=> $data_post['keterangan'],
