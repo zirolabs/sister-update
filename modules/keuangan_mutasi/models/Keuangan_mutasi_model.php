@@ -17,6 +17,7 @@ class Keuangan_mutasi_model extends CI_Model
 		return $query->row()->total_saldo;
 	}
 
+	// Cek saldo berdasarkan NIS (QR Code)
 	function get_saldo_by_nis($nis)
 	{
 		$this->db->select('
