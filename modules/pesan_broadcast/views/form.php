@@ -77,6 +77,7 @@
 										      	<input type="checkbox" value="Y" name="target_kepala_sekolah"> Kepala Sekolah
 										    </label>
 										</div>
+										<!-- Menambahkan Checkbox untuk target semua pegawai -->
 										<div class="checkbox">
 										    <label>
 										      	<input type="checkbox" value="Y" name="target_guru_staff"> Guru dan Staff
