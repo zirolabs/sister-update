@@ -83,6 +83,7 @@ class Manajemen_guru_model extends CI_Model
 		return $get;
 	}
 
+	// Modal untuk mendapatkan data semua user dengan level guru
 	function get_data_all($param = array())
 	{
 		$level_user 	= $this->session->userdata('login_level');
