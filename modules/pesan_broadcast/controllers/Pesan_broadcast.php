@@ -221,6 +221,7 @@ class Pesan_broadcast extends CI_Controller
 					}
 				}
 
+				// Menambahkan Controller untuk mengirim BC ke guru, staff, operator, kepala sekolah
 				if(@$data_post['target_guru_staff'] == 'Y')
 				{
 					// untuk semua user level guru
