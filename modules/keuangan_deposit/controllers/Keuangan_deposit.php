@@ -93,6 +93,7 @@ class Keuangan_deposit extends CI_Controller
 		redirect('keuangan_deposit');
 	}
 
+	// Deposit dengan QR Code
 	public function submitnis()
 	{
 		$data_post = $this->input->post();
@@ -178,6 +179,7 @@ class Keuangan_deposit extends CI_Controller
 		echo json_encode($respon);
 	}
 
+	// ajax untuk cek berdasarkan NIS (Untuk deposit dengan QR Code)
 	function ajax_pemilik_nis()
 	{
 		$respon = array('status'	=> '201');

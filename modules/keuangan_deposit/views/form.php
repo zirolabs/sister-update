@@ -18,6 +18,7 @@
 			</div>
             <div class="tab-content">
               <div class="tab-pane" id="tab_1">
+			  <!-- Deposit dengan RFID -->
 			  <form class="form-horizontal" method="POST" action="<?=site_url('keuangan_deposit/submit/')?>" enctype="multipart/form-data">
 					<div class="box-body">
 						<div class="form-group">
@@ -79,6 +80,7 @@
               </div>
               <!-- /.tab-pane -->
               <div class="tab-pane active" id="tab_2">
+			  <!-- Deposit dengan QR Code -->
 				<form class="form-horizontal" method="POST" action="<?=site_url('keuangan_deposit/submitnis/')?>" enctype="multipart/form-data">
 					<div class="box-body">
 						<div class="form-group">
