@@ -51,13 +51,6 @@ class Keuangan_rfid extends CI_Controller
 		$this->templates->load('main_templates', $param);
 	}
 
-	public function tes(){
-		$param['main_content']		= 'keuangan_rfid/tesqr';
-		$param['page_active'] 		= $this->page_active;
-		$param['sub_page_active'] 	= $this->sub_page_active;
-		$this->templates->load('main_templates', $param);
-	}
-
 	public function form($id = '')
 	{
 		$param['msg']			= $this->session->flashdata('msg');
@@ -142,6 +135,7 @@ class Keuangan_rfid extends CI_Controller
 		}
 	}
 
+	// registrasi dengan QR Code 
 	public function submitqr($id = '')
 	{
 		$data_post = $this->input->post();

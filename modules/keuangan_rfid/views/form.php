@@ -16,14 +16,17 @@
 				</div>
 			</div>
 			<hr/>
+			<!-- Nav Tabs -->
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#tab_2" data-toggle="tab" aria-expanded="true"><b>Gunakan QR Code</b></a></li>
 					<li class=""><a href="#tab_1" data-toggle="tab" aria-expanded="false"><b>Gunakan RFID</b></a></li>
 				</ul>
 			</div>
+			<!-- end nav tabs -->
 			<div class="tab-content">
               <div class="tab-pane" id="tab_1">
+				<!-- Registrasi dengan RFID -->
 					<form class="form-horizontal" method="POST" action="<?=site_url('keuangan_rfid/submit/' . $id)?>" enctype="multipart/form-data">
 						<div class="box-body">
 							
@@ -84,7 +87,8 @@
 					</form>
 			   </div>
 			   <div class="tab-pane active" id="tab_2">
-			   <form class="form-horizontal" method="POST" action="<?=site_url('keuangan_rfid/submitqr/' . $id)?>" enctype="multipart/form-data">
+			   	<!-- Registrasi dengan QR Code -->
+			   		<form class="form-horizontal" method="POST" action="<?=site_url('keuangan_rfid/submitqr/' . $id)?>" enctype="multipart/form-data">
 						<div class="box-body">
 							<div class="form-group">
 								<label class="col-md-2 control-label">Sekolah</label>
@@ -219,6 +223,7 @@
 		return false;
 	}
 
+	// Fungsi untuk NIS di Registrasi QR
 	function checkNISQR()
 	{
 		$('.status-check-nis').html('');
@@ -288,6 +293,7 @@
 		});	
 	}	
 
+	// Source code menampilkan NIS menjadi QR Qode
 	var qrcode = new QRCode(document.getElementById("qrcode"), {
 	width : 100,
 	height : 100
@@ -309,5 +315,6 @@
 				makeCode();
 			}
 		});
+	// Akhir Source Code
 </script>
 
