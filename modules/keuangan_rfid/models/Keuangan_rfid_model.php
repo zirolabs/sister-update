@@ -68,6 +68,7 @@ class Keuangan_rfid_model extends CI_Model
 		return $get;
 	}
 
+	// get data berdasarkan nis (QR Code)
 	function get_data_nis($param = array())
 	{
 		$this->db->select("
