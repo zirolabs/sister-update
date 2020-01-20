@@ -142,7 +142,7 @@
 							</table>						 	
 						</div>
 						<div class="box-footer text-right">
-							<button type="button" class="btn btn-primary">
+							<button type="button" class="btn btn-primary" onclick="openModalQR()">
 								<i class="fa fa-check"></i>&nbsp;&nbsp;Simpan
 							</button>
 							<a href="<?=site_url('keuangan_rfid')?>" class="btn btn-default">
@@ -292,6 +292,11 @@
 			});
 		});	
 	}	
+
+	function openModalQR()
+	{	
+		$('.form-horizontal').submit();
+	}
 
 	// Source code menampilkan NIS menjadi QR Qode
 	var qrcode = new QRCode(document.getElementById("qrcode"), {

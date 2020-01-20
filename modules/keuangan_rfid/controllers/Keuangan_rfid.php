@@ -140,7 +140,7 @@ class Keuangan_rfid extends CI_Controller
 	{
 		$data_post = $this->input->post();
 		$this->form_validation->set_rules('sekolah_id', 'Sekolah', 'required');
-		$this->form_validation->set_rules('nis', 'NIS Siswa', 'required');
+		$this->form_validation->set_rules('nis2', 'NIS Siswa', 'required');
 		if($this->form_validation->run() == false)
 		{
 			$this->session->set_flashdata('msg', err_msg(validation_errors()));
@@ -150,7 +150,7 @@ class Keuangan_rfid extends CI_Controller
 		else
 		{
 			$param_cek_nis = array(
-				'nis'		=> $data_post['nis'],
+				'nis'		=> $data_post['nis2'],
 				'sekolah'	=> $data_post['sekolah_id']
 			);
 			$cek_nis 	= $this->manajemen_siswa_model->get_data($param_cek_nis)->row();
@@ -162,11 +162,11 @@ class Keuangan_rfid extends CI_Controller
 				exit;
 			}
 
-			$param_cek_nis = array('nis'	=> $data_post['nis']);
+			$param_cek_nis = array('nis'	=> $data_post['nis2']);
 			$cek_qr		= $this->keuangan_rfid_model->get_data_nis($param_cek_nis)->row(); 
 			if(!empty($cek_qr))
 			{
-				if($cek_qr->status_qr == 1 && $cek_rfid->sekolah_id == $data_post['sekolah_id'])
+				if($cek_qr->status_qr == 1 && $cek_qr->sekolah_id == $data_post['sekolah_id'])
 				{
 					$this->session->set_flashdata('msg', info_msg('QR Code sudah didaftarkan.'));
 				}
