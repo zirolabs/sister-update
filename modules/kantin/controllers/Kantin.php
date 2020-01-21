@@ -103,6 +103,71 @@ class Kantin extends CI_Controller
 		redirect('kantin/form/' . $id);
 	}
 
+	public function submitqr($id = '')
+	{
+		if(empty($id))
+		{
+			show_404();
+		}
+
+		$data_post = $this->input->post();
+		$this->form_validation->set_rules('nis', 'QR Code', 'required');
+		$this->form_validation->set_rules('nominal', 'Nominal', 'required');
+		if($this->form_validation->run() == false)
+		{
+			$this->session->set_flashdata('msg', err_msg(validation_errors()));
+			$this->session->set_flashdata('last_data', $data_post);
+		}
+		else
+		{
+			$param_cek = array('nis'	=> $data_post['nis']);
+			$cek_nis		= $this->keuangan_rfid_model->get_data_nis($param_cek)->row(); 
+			if(empty($cek_nis))
+			{
+				$this->session->set_flashdata('msg', err_msg('QR Code belum terdaftar.'));
+				$this->session->set_flashdata('last_data', $data_post);
+			}
+			else
+			{
+				$this->load->model('keuangan_mutasi/keuangan_mutasi_model');
+				$sisa_saldo  = $this->keuangan_mutasi_model->get_saldo_by_nis($data_post['nis']);
+				if($sisa_saldo < $data_post['nominal'])
+				{
+					$this->session->set_flashdata('msg', err_msg('Sisa saldo tidak mencukupi.'));
+					redirect('kantin/form/' . $id);
+					exit;
+				}
+
+				$data_post['jenis']		 = 'Debit';
+				$data_post['keterangan'] = 'Transaksi di Kantin.';
+				if(!empty($data_post['keterangan']))
+				{
+					$data_post['keterangan'] .= ' Keterangan : ' . $data_post['keterangan'];									
+				}
+
+				$param_db = array(
+					'user_id'		=> $cek_nis->user_id,
+					'master_id'		=> 0,
+					'jenis'			=> $data_post['jenis'],
+					'nominal'		=> $data_post['nominal'],
+					'keterangan'	=> $data_post['keterangan'],
+					'waktu'			=> date('Y-m-d H:i:s')
+				);
+
+				$proses = $this->keuangan_mutasi_model->insert($param_db);
+				if($proses)
+				{
+					$this->session->set_flashdata('msg', suc_msg('Data transaksi berhasil disimpan.'));
+				}
+				else
+				{
+					$this->session->set_flashdata('msg', err_msg('Data transaksi gagal disimpan. Silahkan ulangi lagi.'));
+				}				
+			}
+		}
+		redirect('kantin/form/' . $id);
+	}
+
 	function ajax_pemilik_kartu()
 	{
 		$respon = array('status'	=> '201');
@@ -115,6 +180,35 @@ class Kantin extends CI_Controller
 			{
 				$this->load->model('keuangan_mutasi/keuangan_mutasi_model');
 				$sisa_saldo = $this->keuangan_mutasi_model->get_saldo($kode);
+				$respon = array(
+					'status'	=> '200',
+					'data'		=> array(
+						'nama'			=> $get_data->nama_siswa,
+						'nis'			=> $get_data->nis,
+						'kelas'			=> $get_data->kelas,
+						'sekolah'		=> $get_data->sekolah,
+						'sisa_saldo'	=> format_rupiah($sisa_saldo)
+					)
+				);
+			}
+		}
+
+		echo json_encode($respon);
+	}
+
+	// ajax untuk cek berdasarkan NIS (Untuk deposit dengan QR Code)
+	function ajax_pemilik_nis()
+	{
+		$respon = array('status'	=> '201');
+
+		$kode = $this->input->post('kode');
+		if(!empty($kode))
+		{
+			$get_data = $this->keuangan_rfid_model->get_data_nis(array('nis' => $kode))->row();
+			if(!empty($get_data))
+			{
+				$this->load->model('keuangan_mutasi/keuangan_mutasi_model');
+				$sisa_saldo = $this->keuangan_mutasi_model->get_saldo_by_nis($kode);
 				$respon = array(
 					'status'	=> '200',
 					'data'		=> array(
