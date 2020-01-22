@@ -55,6 +55,7 @@ class Pesan_broadcast extends CI_Controller
 		}
 		else
 		{
+
 			if(empty($data_post['kelas']))
 			{
 				$this->session->set_flashdata('msg', err_msg('Pilih Kelas'));
@@ -156,134 +157,129 @@ class Pesan_broadcast extends CI_Controller
 					}
 				}
 
-				if(@$data_post['target_operator_sekolah'] == 'Y')
-				{
-					$filter = array('sekolah_id' => $data_post['sekolah_id']);
-					$get_data_operator = $this->manajemen_operator_model->get_data($filter)->result();
-					if(!empty($get_data_operator))
-					{
-						foreach($get_data_operator as $kex => $x)
-						{
-							if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $x->user_id, 'operator sekolah'))
-							{
-								if(!empty($x->fcm))
-								{
-									$this->fcm->insertNotifikasiUser($x->user_id, 'Pesan Broadcast untuk Operator Sekolah', $isi_notifikasi, $x->fcm, 'pesan');
-								}			
-								else
-								{
-									$this->sms->insertNotifikasiUser($x->user_id, $isi_notifikasi);									
-								}				
-							}							
-						}
-					}
-				}
-
-				if(@$data_post['target_kepala_sekolah'] == 'Y')
-				{
-					$get_data_kepala_sekolah = $this->profil_sekolah_model->get_data_row($data_post['sekolah_id']);
-					if(!empty($get_data_kepala_sekolah))
-					{
-						if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $get_data_kepala_sekolah->user_id, 'kepala sekolah'))
-						{
-							if(!empty($get_data_kepala_sekolah->user_fcm))
-							{
-								$this->fcm->insertNotifikasiUser($get_data_kepala_sekolah->user_id, 'Pesan Broadcast untuk Kepala Sekolah', $isi_notifikasi, $get_data_kepala_sekolah->user_fcm, 'pesan');
-							}							
-							else
-							{
-								$this->sms->insertNotifikasiUser($get_data_kepala_sekolah->user_id, $isi_notifikasi);								
-							}
-						}							
-					}
-				}
-
 				if(@$data_post['target_guru'] == 'Y')
 				{
-					$filter = array('sekolah_id' => $data_post['sekolah_id']);
-					$get_data = $this->manajemen_guru_model->get_data($filter)->result();
-					if(!empty($get_data))
-					{
-						foreach($get_data as $kex => $x)
-						{
-							if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $x->user_id,'Guru & Staff'))
-							{
-								if(!empty($x->fcm))
-								{
-									$this->fcm->insertNotifikasiUser($x->user_id, 'Pesan Broadcast untuk Seluruh Guru & Staff', $isi_notifikasi, $x->fcm, 'pesan');
-								}			
-								else
-								{
-									$this->sms->insertNotifikasiUser($x->user_id, $isi_notifikasi);									
-								}				
-							}							
-						}
-					}
 				}
+			}
+			$this->session->set_flashdata('msg', suc_msg('Pesan berhasil dikirim.'));
+		}
+		redirect('pesan_broadcast');
+	}
 
-				// Menambahkan Controller untuk mengirim BC ke guru, staff, operator, kepala sekolah
-				if(@$data_post['target_guru_staff'] == 'Y')
+	public function submitpegawai($id = '')
+	{
+		$data_post = $this->input->post();
+		$this->form_validation->set_rules('isi', 'Isi', 'required');
+		$this->form_validation->set_rules('sekolah_id', 'Sekolah', 'required');
+		if($this->form_validation->run() == false)
+		{
+			$this->session->set_flashdata('msg', err_msg(validation_errors()));
+			$this->session->set_flashdata('last_data', $data_post);
+			redirect('pesan_broadcast/index/' . $id);
+		}
+		else
+		{
+
+			$gambar = '';
+			if(!empty($_FILES['userfiles']['tmp_name']))
+			{
+				$config['upload_path']      = './uploads/pesan/';
+	            $config['allowed_types']    = 'jpg|png';
+	 			$config['max_size'] 		= '2048';
+
+	            if (!is_dir($config['upload_path']))
+	            {
+	                mkdir($config['upload_path']);
+	            }
+
+	            $this->load->library('upload', $config);
+	            if (!$this->upload->do_upload('userfiles'))
+	            {
+					$this->session->set_flashdata('msg', err_msg($this->upload->display_errors()));
+					$this->session->set_flashdata('last_data', $data_post);
+					redirect('pesan_broadcast/index/' . $id);
+	            }
+	            else
+	            {
+	            	$data_upload 	= $this->upload->data();
+	            	$gambar			= $config['upload_path'] . $data_upload['file_name'];
+	            }
+			}			
+
+			$param_pesan = array(
+				'user_id'		=> $this->login_uid,
+				'isi'			=> $data_post['isi'],
+				'gambar'		=> $gambar,
+				'waktu_kirim'	=> date('Y-m-d H:i:s')
+			);
+
+			$isi_notifikasi 	= substr($param_pesan['isi'], 0, 150);
+
+			if(@$data_post['target_operator_sekolah'] == 'Y')
+			{
+				$filter = array('sekolah_id' => $data_post['sekolah_id']);
+				$get_data_operator = $this->manajemen_operator_model->get_data($filter)->result();
+				if(!empty($get_data_operator))
 				{
-					// untuk semua user level guru
-					$filter = array('sekolah_id' => $data_post['sekolah_id']);
-					$get_data_all = $this->manajemen_guru_model->get_data_all($filter)->result();
-					if(!empty($get_data_all))
+					foreach($get_data_operator as $kex => $x)
 					{
-						foreach($get_data_all as $kex => $x)
+						if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $x->user_id, 'operator sekolah'))
 						{
-							if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $x->user_id,'Guru & Staff'))
+							if(!empty($x->fcm))
 							{
-								if(!empty($x->fcm))
-								{
-									$this->fcm->insertNotifikasiUser($x->user_id, 'Pesan Broadcast untuk Seluruh Guru & Staff', $isi_notifikasi, $x->fcm, 'pesan');
-								}			
-								else
-								{
-									$this->sms->insertNotifikasiUser($x->user_id, $isi_notifikasi);									
-								}				
-							}							
-						}
-					}
-
-					// user level kepala sekolah
-					$get_data_kepala_sekolah = $this->profil_sekolah_model->get_data_row($data_post['sekolah_id']);
-					if(!empty($get_data_kepala_sekolah))
-					{
-						if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $get_data_kepala_sekolah->user_id, 'kepala sekolah'))
-						{
-							if(!empty($get_data_kepala_sekolah->user_fcm))
-							{
-								$this->fcm->insertNotifikasiUser($get_data_kepala_sekolah->user_id, 'Pesan Broadcast untuk Kepala Sekolah', $isi_notifikasi, $get_data_kepala_sekolah->user_fcm, 'pesan');
-							}							
+								$this->fcm->insertNotifikasiUser($x->user_id, 'Pesan Broadcast untuk Operator Sekolah', $isi_notifikasi, $x->fcm, 'pesan');
+							}			
 							else
 							{
-								$this->sms->insertNotifikasiUser($get_data_kepala_sekolah->user_id, $isi_notifikasi);								
-							}
+								$this->sms->insertNotifikasiUser($x->user_id, $isi_notifikasi);									
+							}				
 						}							
-					}
-
-					// operator sekolah
-					$filter = array('sekolah_id' => $data_post['sekolah_id']);
-					$get_data_operator = $this->manajemen_operator_model->get_data($filter)->result();
-					if(!empty($get_data_operator))
-					{
-						foreach($get_data_operator as $kex => $x)
-						{
-							if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $x->user_id, 'operator sekolah'))
-							{
-								if(!empty($x->fcm))
-								{
-									$this->fcm->insertNotifikasiUser($x->user_id, 'Pesan Broadcast untuk Operator Sekolah', $isi_notifikasi, $x->fcm, 'pesan');
-								}			
-								else
-								{
-									$this->sms->insertNotifikasiUser($x->user_id, $isi_notifikasi);									
-								}				
-							}							
-						}
 					}
 				}
 			}
+
+			if(@$data_post['target_kepala_sekolah'] == 'Y')
+			{
+				$get_data_kepala_sekolah = $this->profil_sekolah_model->get_data_row($data_post['sekolah_id']);
+				if(!empty($get_data_kepala_sekolah))
+				{
+					if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $get_data_kepala_sekolah->user_id, 'kepala sekolah'))
+					{
+						if(!empty($get_data_kepala_sekolah->user_fcm))
+						{
+							$this->fcm->insertNotifikasiUser($get_data_kepala_sekolah->user_id, 'Pesan Broadcast untuk Kepala Sekolah', $isi_notifikasi, $get_data_kepala_sekolah->user_fcm, 'pesan');
+						}							
+						else
+						{
+							$this->sms->insertNotifikasiUser($get_data_kepala_sekolah->user_id, $isi_notifikasi);								
+						}
+					}							
+				}
+			}
+
+			if(@$data_post['target_guru_staff'] == 'Y')
+			{
+				$filter = array('sekolah_id' => $data_post['sekolah_id']);
+				$get_data = $this->manajemen_guru_model->get_data_all($filter)->result();
+				if(!empty($get_data))
+				{
+					foreach($get_data as $kex => $x)
+					{
+						if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $x->user_id, 'Guru & Staf'))
+						{
+							if(!empty($x->fcm))
+							{
+								$this->fcm->insertNotifikasiUser($x->user_id, 'Pesan Broadcast untuk Staf', $isi_notifikasi, $x->fcm, 'pesan');
+							}			
+							else
+							{
+								$this->sms->insertNotifikasiUser($x->user_id, $isi_notifikasi);									
+							}				
+						}							
+					}
+				}
+			}
+			
 			$this->session->set_flashdata('msg', suc_msg('Pesan berhasil dikirim.'));
 		}
 		redirect('pesan_broadcast');
