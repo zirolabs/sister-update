@@ -213,7 +213,7 @@ class Pesan_langsung extends CI_Controller
 				'sekolah'	=> $data_post['sekolah_id'], 
 				'keyword' => $data_post['keyword']
 			);
-			$data['user'] = $this->manajemen_guru_model->get_data($filter)->result();			
+			$data['user'] = $this->manajemen_guru_model->get_data_guru($filter)->result();			
 		}
 
 		$this->load->view('form_user', $data);
