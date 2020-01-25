@@ -17,8 +17,7 @@
         
         <script src="<?=base_url('vendor/almasaeed2010/adminlte/bower_components/jquery/dist/jquery.min.js')?>"></script>
         <script src="<?=base_url('vendor/almasaeed2010/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js')?>"></script>
-        <script src="<?=base_url('vendor/almasaeed2010/adminlte/bower_components/qrcodejs/qrcode.js')?>"></script>
-        
+        <script src="<?=base_url('vendor/almasaeed2010/adminlte/bower_components/qrcode_js/qrcode.js')?>"></script>
     </head>
     <!--
         BODY TAG OPTIONS:
