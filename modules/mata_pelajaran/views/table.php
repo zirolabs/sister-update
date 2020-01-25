@@ -87,7 +87,7 @@
                                         <br/>Keterangan : <?=$c->keterangan?>
                                     <?php } ?>
                                     <?php if(!empty($c->lokasi_file)){ ?>                                       
-                                        <br/><a href="<?=base_url('mata_pelajaran/detail/' . $c->materi_id)?>" target="_blank">Lihat Modul</a>
+                                        <br/><a href="<?=site_url('mata_pelajaran/detail/' . $c->materi_id)?>" target="_blank">Lihat Modul</a>
                                     <?php } ?>
                                 </td>
                                 <td><?=$c->nama_uploader?><br/>@<?=format_tanggal_indonesia($c->waktu_upload, true)?></td>
