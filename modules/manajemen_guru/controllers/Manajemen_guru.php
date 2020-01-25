@@ -39,7 +39,7 @@ class Manajemen_guru extends CI_Controller
 
 		unset($filter['limit']);
 		unset($filter['offset']);
-		$total_rows 				= $this->manajemen_guru_model->get_data($filter)->num_rows();
+		$total_rows 				= $this->manajemen_guru_model->get_data_guru($filter)->num_rows();
 		$param['pagination']		= paging('manajemen_guru/index', $total_rows, $limit, $uri_segment);
 
 		$param['opt_sekolah']		= $this->profil_sekolah_model->get_opt('Semua Sekolah');
@@ -317,28 +317,5 @@ class Manajemen_guru extends CI_Controller
 		echo form_dropdown('wali_kelas', $result, $selected, 'class="form-control"');
 	}
 	
-	function ajax_kelas()
-	{
-		// $respon = array('status'	=> '201');
-
-		$kode = $this->input->post('user_id');
-		if(!empty($kode))
-		{
-			$get_data = $this->pengaturan_kelas_model->get_data_guru(array('user_id' => $kode))->row();
-			if(!empty($get_data))
-			{
-				// $this->load->model('keuangan_mutasi/keuangan_mutasi_model');
-				// $sisa_saldo = $this->keuangan_mutasi_model->get_saldo($kode);
-				$respon = array(
-					// 'status'	=> '200',
-					'data'		=> array(
-						'kelas'			=> $get_data->kelas
-					)
-				);
-			}
-		}
-
-		echo json_encode($respon);
-	}
 
 }
