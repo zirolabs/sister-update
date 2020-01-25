@@ -95,6 +95,19 @@ class Pengaturan_kelas_model extends CI_Model
 		return $get;
 	}
 
+	// Mengambil data berdasarkan id_kelas user guru
+	function get_data_guru($id)
+	{
+		$this->db->select("
+			CONCAT(a.jenjang,' ',b.nama,' ', a.nama) AS kelas,
+		");
+		$this->db->from('master_kelas a');
+		$this->db->join('master_jurusan b', 'a.jurusan_id = b.jurusan_id','left');
+		$this->db->where('a.user_id', $id);
+		$get = $this->db->get('master_kelas');
+		return $get->row();
+	}
+
 	function get_data_row($id)
 	{
 		$this->db->where('kelas_id', $id);

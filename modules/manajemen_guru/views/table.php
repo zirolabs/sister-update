@@ -77,7 +77,12 @@
                                 <td><?=$c->nip?></td>
                                 <td><?=$c->nama?></td>
                                 <td><?=$c->jabatan?></td>
-                                <td><?=$c->kelas?></td>
+                                <td>
+                                    <?  $kelas = $this->pengaturan_kelas_model->get_data_guru($c->user_id);
+                                        if(!empty($kelas))
+                                        echo $kelas->kelas;
+                                    ?>
+                                </td>
 							</tr>
 						<?php endforeach; ?>
 					<?php } else { ?>
