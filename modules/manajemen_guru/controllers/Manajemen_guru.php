@@ -35,15 +35,14 @@ class Manajemen_guru extends CI_Controller
 			'sekolah'	=> $param['sekolah'],
 		);
 
-		$param['data'] = $this->manajemen_guru_model->get_data_guru($filter)->result();
+		$param['data'] 		 = $this->manajemen_guru_model->get_data_guru($filter)->result();
+		$param['wali_kelas'] = $this->pengaturan_kelas_model;
 
 		unset($filter['limit']);
 		unset($filter['offset']);
 		$total_rows 				= $this->manajemen_guru_model->get_data_guru($filter)->num_rows();
 		$param['pagination']		= paging('manajemen_guru/index', $total_rows, $limit, $uri_segment);
-
 		$param['opt_sekolah']		= $this->profil_sekolah_model->get_opt('Semua Sekolah');
-
 		$param['main_content']		= 'manajemen_guru/table';
 		$param['page_active'] 		= $this->page_active;
 		$param['sub_page_active'] 	= $this->sub_page_active;

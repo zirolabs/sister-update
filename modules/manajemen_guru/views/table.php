@@ -78,7 +78,8 @@
                                 <td><?=$c->nama?></td>
                                 <td><?=$c->jabatan?></td>
                                 <td>
-                                    <?  $kelas = $this->pengaturan_kelas_model->get_data_guru($c->user_id);
+                                    <?php
+                                        $kelas = $wali_kelas->get_data_guru($c->user_id);
                                         if(!empty($kelas))
                                         echo $kelas->kelas;
                                     ?>
