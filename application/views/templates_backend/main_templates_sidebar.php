@@ -381,6 +381,31 @@
             </li>
         <?php } ?>
 
+        <?php if(in_array($login_level, array('administrator'))||in_array($login_level, array('operator sekolah'))){ ?>
+        <li class="treeview <?=@$page_active == 'kantin' ? 'active' : ''?>">
+            <a href="#">
+                <i class="fa fa-sellsy"></i>
+                <span>Produk Kantin</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li class="<?=@$sub_page_active == 'produk_kantin' ? 'active' : ''?>"">
+                    <a href="<?=site_url('produk_kantin')?>">
+                        <i class="fa fa-circle-o"></i> Produk Kantin
+                    </a>
+                </li>
+                <li class="<?=@$sub_page_active == 'riwayat_produk_kantin' ? 'active' : ''?>"">
+                    <a href="<?=site_url('riwayat_produk_kantin')?>">
+                        <i class="fa fa-circle-o"></i> Riwayat Transaksi
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <?php } ?>
+
+
         <li class="header">Menu User</li>
         <li class="<?=@@$page_active == 'profil' ? 'active' : ''?>">
             <a href="<?=site_url('profil')?>">
