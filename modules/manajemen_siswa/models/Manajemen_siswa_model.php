@@ -23,8 +23,7 @@ class Manajemen_siswa_model extends CI_Model
 
 			if(!empty($param['keyword']))
 			{
-				$this->db->like('a.nama', $param['keyword']);
-				$this->db->or_like('b.nis', $param['keyword']);
+				$this->db->like("CONCAT(a.nama,' ',b.nis)", $param['keyword']);
 			}
 
 			if(!empty($param['user_id']))
