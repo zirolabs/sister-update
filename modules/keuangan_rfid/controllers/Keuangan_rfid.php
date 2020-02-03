@@ -112,7 +112,7 @@ class Keuangan_rfid extends CI_Controller
 					$this->session->set_flashdata('msg', info_msg('Kartu RFID sudah terdaftar dengan siswa yang bersangkutan.'));
 				}
 				else
-				{	
+				{
 					$this->session->set_flashdata('msg', err_msg('Kartu RFID sudah terdaftar pada siswa lain, gunakan kartu lain.'));
 				}
 
