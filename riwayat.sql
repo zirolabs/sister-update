@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Jan 27, 2020 at 10:31 AM
--- Server version: 5.7.23
--- PHP Version: 7.2.8
+-- Waktu pembuatan: 04 Feb 2020 pada 05.47
+-- Versi server: 5.7.23
+-- Versi PHP: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,17 +17,18 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `transaksi_produk`
+-- Struktur dari tabel `transaksi_produk`
 --
 
 CREATE TABLE `transaksi_produk` (
   `traksaksi_id` int(11) NOT NULL,
   `produk_id` int(11) NOT NULL,
-  `sekolah_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `nominal` int(11) NOT NULL,
-  `tanggal_transaksi` datetime NOT NULL,
-  `harga_beli` int(11) NOT NULL
+  `mutasi_id` int(11) NOT NULL,
+  `waktu` datetime NOT NULL,
+  `harga_awal` int(11) NOT NULL,
+  `harga_jual` int(11) NOT NULL,
+  `kuantitas` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -35,18 +36,17 @@ CREATE TABLE `transaksi_produk` (
 --
 
 --
--- Indexes for table `transaksi_produk`
+-- Indeks untuk tabel `transaksi_produk`
 --
 ALTER TABLE `transaksi_produk`
   ADD PRIMARY KEY (`traksaksi_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `transaksi_produk`
+-- AUTO_INCREMENT untuk tabel `transaksi_produk`
 --
 ALTER TABLE `transaksi_produk`
   MODIFY `traksaksi_id` int(11) NOT NULL AUTO_INCREMENT;
-
