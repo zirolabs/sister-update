@@ -9,7 +9,10 @@ class Kantin extends CI_Controller
 		$this->load->model('keuangan_transaksi/keuangan_transaksi_model');
 		$this->load->model('keuangan_mutasi/keuangan_mutasi_model');
 		$this->load->model('keuangan_rfid/keuangan_rfid_model');
+		$this->load->model('produk_kantin/produk_kantin_model');
 		$this->load->model('profil_sekolah/profil_sekolah_model');
+		$this->load->model('riwayat_produk_kantin/riwayat_produk_kantin_model');
+		$this->load->model('produk_kantin/produk_kantin_model');
 	}
 
 	public function index()
@@ -32,11 +35,32 @@ class Kantin extends CI_Controller
 			$param['data'] = (object) $last_data;
 		}
 
+		$param['opt_sekolah']	= $this->profil_sekolah_model->get_opt();
 		$param['id']			= $id;
 		$param['data_sekolah']	= $this->profil_sekolah_model->get_data_row($id);
 		$param['main_content']	= 'kantin/form';
 		$this->templates->load('main_templates', $param);
 	}
+
+	// form backup
+	// public function form($id = '')
+	// {
+	// 	if(empty($id))
+	// 	{
+	// 		show_404();
+	// 	}
+
+	// 	$last_data 	= $this->session->flashdata('last_data');
+	// 	if(!empty($last_data))
+	// 	{
+	// 		$param['data'] = (object) $last_data;
+	// 	}
+
+	// 	$param['id']			= $id;
+	// 	$param['data_sekolah']	= $this->profil_sekolah_model->get_data_row($id);
+	// 	$param['main_content']	= 'kantin/form';
+	// 	$this->templates->load('main_templates', $param);
+	// }
 
 	public function submit($id = '')
 	{
@@ -92,7 +116,24 @@ class Kantin extends CI_Controller
 				$proses = $this->keuangan_mutasi_model->insert($param_db);
 				if($proses)
 				{
+					$mutasi_id = $this->db->insert_id();
 					$this->session->set_flashdata('msg', suc_msg('Data transaksi berhasil disimpan.'));
+
+					foreach ($data_post['produk_id'] as $key => $v) {
+						$param_transaksi = array(
+							'mutasi_id'		=> $mutasi_id,
+							'produk_id'		=> $data_post['produk_id'][$key],
+							'harga_awal'	=> $data_post['harga_awal'][$key],
+							'harga_jual'	=> $data_post['harga_jual'][$key],
+							'kuantitas'		=> $data_post['kuantitas'][$key],
+							'user_id'		=> $cek_rfid->user_id,
+							'waktu'			=> date('Y-m-d H:i:s')
+						);
+
+						$this->produk_kantin_model->kurangi_kuantitas($data_post['produk_id'][$key],$data_post['kuantitas'][$key]);
+						$this->riwayat_produk_kantin_model->insert($param_transaksi);
+					}
+
 				}
 				else
 				{
@@ -221,6 +262,55 @@ class Kantin extends CI_Controller
 				);
 			}
 		}
+
+		echo json_encode($respon);
+	}
+
+	public function ajax_pencarian_produk()
+	{
+		$data_post = $this->input->post();
+
+			$filter = array(
+				'keyword'	=> $data_post['keyword'],
+				'sekolah'	=> $data_post['sekolah_id']
+			);
+			$data['data'] = $this->produk_kantin_model->get_data($filter)->result();
+
+		$this->load->view('form_produk', $data);
+	}
+
+	public function ajax_pencarian_barcode()
+	{
+		$data_post = $this->input->post();
+
+			$filter = array(
+				'keyword_code'	=> $data_post['keyword_code'],
+				'sekolah'	=> $data_post['sekolah_id']
+			);
+			$get_data = $this->produk_kantin_model->get_data($filter)->row();
+
+			if(!empty($get_data))
+			{
+				if($get_data->kuantitas == 0){
+					$respon = array(
+						'status'	=> '201'
+					);
+				}else{
+					$respon = array(
+						'status'	=> '200',
+						'data'		=> array(
+							'nama'			=> $get_data->nama,
+							'produk_id'		=> $get_data->produk_id,
+							'harga_jual'	=> $get_data->harga_jual,
+							'harga_awal'	=> $get_data->harga_awal,
+						)
+					);
+				}
+			}else {
+				$respon = array(
+					'status'	=> '401'
+				);
+			}
 
 		echo json_encode($respon);
 	}

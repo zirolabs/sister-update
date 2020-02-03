@@ -5,7 +5,7 @@
         </h3>
     </div>
     <div class="box-body">
-        <form method="GET" action="<?=site_url('produk_kantin')?>">
+        <form method="GET" action="<?=site_url('riwayat_produk_kantin')?>">
         	<div class="row">
                 <div class="col-md-3 col-md-offset-4">
                     <div class="form-group">
@@ -33,39 +33,32 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th class="col-md-1 text-center"></th>
                         <th class="col-md-2">Sekolah</th>
-                        <th class="col-md-2">Nama Produk</th>
-						<th class="">Kuantitas</th>
-                        <th class="col-md-2">Harga</th>
-                        <th class="col-md-2">Pembeli</th>
-                        <th class="col-md-2">Keuntungan</th>
+                        <th class="col-md-3">Nama Siswa</th>
+                        <th class="col-md-2">Total Transaksi</th>
+                        <th class="col-md-2">Waktu Transaksi</th>
+                        <th class="col-md-1 text-center">Opsi</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php if(!empty($data)){ ?>
 						<?php foreach($data as $key => $c): ?>
 							<tr>
-								<td class="text-center">
-									<a href="<?=site_url('produk_kantin/form/' . $c->produk_id)?>" class="btn btn-default btn-xs" title="Perbaharui / Update">
-										<i class="fa fa-edit"></i>
-									</a>
-									<a onclick="confirm_hapus('<?=$c->produk_id?>')" class="btn btn-default btn-xs" title="Hapus">
-										<i class="fa fa-trash"></i>
-									</a>
-								</td>
                                 <td><?=$c->sekolah?></td>
-                                <td><?=$c->kode_barang?></td>
-                                <td><?=$c->nama?></td>
-                                <td><?=format_rupiah($c->harga_awal)?></td>
-                                <td><?=format_rupiah($c->harga_jual)?></td>
-                                <td><?=$c->kuantitas?></td>
-                                
+                                <td><?=$c->nama_siswa?></td>
+                                <td><?=format_rupiah($c->nominal)?></td>
+                                <td><?=waktu_berlalu($c->waktu)?></td>
+                                <td class="text-center">
+                                    <form method="GET" action="<?=site_url('riwayat_produk_kantin/detail')?>">
+                                        <input type="hidden" name="mutasi_id" value="<?=$c->mutasi_id ?>">
+                                        <button class="btn btn-default btn-xs" title="Detail Pembelian"><i class="fa fa-info"></i></button>
+                                    </form>
+                                </td>                      
 							</tr>
 						<?php endforeach; ?>
 					<?php } else { ?>
 						<tr>
-							<td colspan="7">Tidak ada data.</td>
+							<td colspan="5">Tidak ada data.</td>
 						</tr>
 					<?php } ?>
 				</tbody>
@@ -75,36 +68,3 @@
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="modal-hapus">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                	<span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">
-                	<i class="fa fa-info-circle"></i>&nbsp;&nbsp;Hapus Data
-                </h4>
-            </div>
-            <div class="modal-body">
-            	<h4>Apakah Anda yakin ? </h4>
-            </div>
-            <div class="modal-footer">
-            	<a href="<?=site_url('produk_kantin')?>" id="btn-yes" class="btn btn-default">
-            		<i class="fa fa-check"></i> Ya, Saya Yakin
-            	</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                	<i class="fa fa-times"></i> Tidak
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script type="text/javascript">
-	function confirm_hapus(id)
-	{
-		$('#modal-hapus #btn-yes').attr({'href' : '<?=site_url('produk_kantin/hapus')?>/' + id});
-		$('#modal-hapus').modal();
-	}
-</script> 

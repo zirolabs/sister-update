@@ -21,9 +21,15 @@ class Produk_kantin_model extends CI_Model
 				}
 			}
 
+
 			if(!empty($param['keyword']))
 			{
 				$this->db->like('a.nama', $param['keyword']);
+			}
+
+			if(!empty($param['keyword_code']))
+			{
+				$this->db->where('a.kode_barang', $param['keyword_code']);
 			}
 
 			if(!empty($param['sekolah']))
@@ -74,8 +80,6 @@ class Produk_kantin_model extends CI_Model
 		return $get;
 	}
 
-
-
 	function get_data_row($id)
 	{
 		$this->db->select('a.*, b.nama as sekolah');
@@ -103,6 +107,21 @@ class Produk_kantin_model extends CI_Model
 	{
 		$this->db->where('produk_id', $id);
 		$this->db->update('master_produk', $data);
+		if($this->db->affected_rows() > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function kurangi_kuantitas($id, $kuantitas)
+	{
+		$this->db->set('kuantitas', "kuantitas-'$kuantitas'",FALSE);
+		$this->db->where('produk_id', $id);
+		$this->db->update('master_produk');
 		if($this->db->affected_rows() > 0)
 		{
 			return true;
