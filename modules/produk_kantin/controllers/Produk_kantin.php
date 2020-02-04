@@ -78,10 +78,14 @@ class Produk_kantin extends CI_Controller
 	{
 		$data_post = $this->input->post();
 		$this->form_validation->set_rules('nama', 'Nama', 'required');
-		$this->form_validation->set_rules('kode_barang', 'Kode Barang', 'required|is_unique[master_produk.kode_barang]');
 		$this->form_validation->set_rules('harga_awal', 'Harga Awal','required');
 		$this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
 		$this->form_validation->set_rules('kuantitas', 'Kuantitas', 'required');
+
+		if(empty($id))
+		{
+			$this->form_validation->set_rules('kode_barang', 'Kode Barang', 'required|is_unique[master_produk.kode_barang]');
+		}
 
 		if($this->form_validation->run() == false)
 		{
