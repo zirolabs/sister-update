@@ -4,6 +4,9 @@ class Pengaturan_jam_sesi_model extends CI_Model
 {
 	function get_data($param = array())
 	{
+		$level_user 	= $this->session->userdata('login_level');
+		$id_user 	 	= $this->session->userdata('login_uid');
+
 		if(!empty($param))
 		{
 			if(!empty($param['limit']))
@@ -25,7 +28,19 @@ class Pengaturan_jam_sesi_model extends CI_Model
 
 			if(!empty($param['sekolah']))
 			{
-				$this->db->where('c.sekolah_id', $param['sekolah']);
+				$this->db->where('a.sekolah_id', $param['sekolah']);
+			}
+
+			if(!empty($param['kepala sekolah']))
+			{
+				$level_user = 'kepala sekolah';
+				$id_user 	= $param['kepala sekolah'];
+			}
+
+			if(!empty($param['operator sekolah']))
+			{
+				$level_user = 'operator sekolah';
+				$id_user 	= $param['operator sekolah'];
 			}
 		}
 		$this->db->select('a.*, b.nama as nama_sesi, c.nama as nama_sekolah');
@@ -34,6 +49,23 @@ class Pengaturan_jam_sesi_model extends CI_Model
 		$this->db->from('master_sesi_jam a');
 		$this->db->join('master_sesi b', 'a.sesi_id = b.sesi_id');
 		$this->db->join('profil_sekolah c', 'c.sekolah_id = a.sekolah_id');
+
+		if($level_user == 'kepala sekolah')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = e.sekolah_id');
+		}
+		elseif($level_user == 'operator sekolah')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_operator x', 'x.sekolah_id = c.sekolah_id');
+		}
+		elseif($level_user == 'guru')
+		{
+			$this->db->where('c.user_id', $id_user);
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_guru x', 'x.sekolah_id = e.sekolah_id');			
+		}
 		$get = $this->db->get();
 		return $get;
 	}
