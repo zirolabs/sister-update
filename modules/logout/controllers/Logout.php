@@ -15,6 +15,7 @@ class Logout extends CI_Controller
 
 		$this->session->unset_userdata('login_status');
 		$this->session->unset_userdata('login_uid');
+		$this->session->unset_userdata('login_level');
 		$this->session->set_flashdata('msg', suc_msg('Logout Berhasil.'));
 		redirect();
 	}

@@ -41,6 +41,7 @@ class Login extends CI_Controller
 		$this->session->set_flashdata('msg', suc_msg('Selamat Datang.'));
 		$this->session->set_userdata('login_status', 'ok');
 		$this->session->set_userdata('login_uid', $get_data_login->user_id);
+		$this->session->set_userdata('login_level', $get_data_login->level);
 		redirect('home');
 	}
 

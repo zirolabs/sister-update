@@ -75,6 +75,11 @@ class Produk_kantin_model extends CI_Model
 			$this->db->where('x.user_id', $id_user);
 			$this->db->join('user_operator x', 'x.sekolah_id = b.sekolah_id');
 		}
+		elseif($level_user == 'user kantin')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_kantin x', 'x.sekolah_id = b.sekolah_id');
+		}
 
 		$get = $this->db->get();
 		return $get;

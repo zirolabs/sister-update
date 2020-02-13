@@ -5,6 +5,18 @@ class Kantin extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
+		$this->login_level 		= $this->session->userdata('login_level');
+		$cek = FALSE;
+		if($this->login_level == 'user kantin' || $this->login_level == 'operator sekolah' || $this->login_level == 'administrator'){
+			$cek = TRUE;
+		}
+
+		if($cek != TRUE)
+		{
+			$this->session->set_flashdata('msg', err_msg('Silahkan login untuk melanjutkan.'));
+			redirect(base_url('index.php/login'));
+		}
+
 		$this->load->model('kantin_model');
 		$this->load->model('keuangan_transaksi/keuangan_transaksi_model');
 		$this->load->model('keuangan_mutasi/keuangan_mutasi_model');
@@ -13,12 +25,15 @@ class Kantin extends CI_Controller
 		$this->load->model('profil_sekolah/profil_sekolah_model');
 		$this->load->model('riwayat_produk_kantin/riwayat_produk_kantin_model');
 		$this->load->model('produk_kantin/produk_kantin_model');
+		$this->page_active 		= 'dashboard_kantin';
 	}
 
 	public function index()
 	{
-		$param['data']			= $this->profil_sekolah_model->get_data()->result();
+		$param['data']			= $this->profil_sekolah_model->get_data_kantin()->result();
+		// $param['data']	= $this->profil_sekolah_model->get_opt();
 		$param['main_content']	= 'kantin/table';
+		$param['page_active'] 		= $this->page_active;
 		$this->templates->load('main_templates', $param);
 	}
 

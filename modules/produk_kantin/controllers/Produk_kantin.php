@@ -7,10 +7,16 @@ class Produk_kantin extends CI_Controller
 		parent::__construct();
 		$this->login_status 	= $this->session->userdata('login_status');
 		$this->login_uid 		= $this->session->userdata('login_uid');
-		if($this->login_status != 'ok')
+		$this->login_level 		= $this->session->userdata('login_level');
+		$cek = FALSE;
+		if($this->login_level == 'user kantin' || $this->login_level == 'operator sekolah' || $this->login_level == 'administrator'){
+			$cek = TRUE;
+		}
+
+		if($cek != TRUE)
 		{
 			$this->session->set_flashdata('msg', err_msg('Silahkan login untuk melanjutkan.'));
-			redirect(site_url('login'));
+			redirect(base_url('index.php/login'));
 		}
 
 		$this->load->model('produk_kantin_model');
@@ -84,7 +90,7 @@ class Produk_kantin extends CI_Controller
 
 		if(empty($id))
 		{
-			$this->form_validation->set_rules('kode_barang', 'Kode Barang', 'required|is_unique[master_produk.kode_barang]');
+			$this->form_validation->set_rules('kode_barang', 'Kode Barang', 'required');
 		}
 
 		if($this->form_validation->run() == false)

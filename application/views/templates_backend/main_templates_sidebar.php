@@ -13,11 +13,13 @@
 
     <ul class="sidebar-menu" data-widget="tree">
         <li class="header">Menu Utama</li>
+        <?php if(!in_array($login_level,array('user kantin'))){ ?>
         <li class="<?=@$page_active == 'home' ? 'active open' : "" ?>">
             <a href="<?=site_url()?>">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
         </li>
+        <?php } ?>
         <?php if(in_array($login_level, array('administrator'))){ ?>
             <li class="<?=@$page_active == 'buku_tamu' ? 'active open' : "" ?>">
                 <a href="<?=site_url('buku_tamu')?>">
@@ -25,58 +27,60 @@
                 </a>
             </li>
         <?php } ?>
-        <li class="<?=@$page_active == 'monitoring' ? 'active open' : "" ?>">
-            <a href="<?=site_url('monitoring')?>">
-                <i class="fa fa-bullseye"></i> <span>Monitoring</span>
-            </a>
-        </li>
-        <li class="treeview <?=@$page_active == 'pesan' ? 'active' : ''?>">
-            <a href="#">
-                <i class="fa fa-envelope"></i>
-                <span>Pesan</span>
-                <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                </span>
-            </a>
-            <ul class="treeview-menu">
-                <li class="<?=@$sub_page_active == 'pesan_kotak' ? 'active' : ''?>"">
-                    <a href="<?=site_url('pesan_kotak')?>">
-                        <i class="fa fa-circle-o"></i> Kotak Pesan
-                    </a>
-                </li>
-                <li class="<?=@$sub_page_active == 'pesan_broadcast' ? 'active' : ''?>"">
-                    <a href="<?=site_url('pesan_broadcast')?>">
-                        <i class="fa fa-circle-o"></i> Kirim Broadcast
-                    </a>
-                </li>
-                <li class="<?=@$sub_page_active == 'pesan_langsung' ? 'active' : ''?>"">
-                    <a href="<?=site_url('pesan_langsung')?>">
-                        <i class="fa fa-circle-o"></i> Kirim Direct Message
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="treeview <?=@$page_active == 'pengumuman' ? 'active' : ''?>">
-            <a href="#">
-                <i class="fa fa-info-circle"></i>
-                <span>Pengumuman</span>
-                <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                </span>
-            </a>
-            <ul class="treeview-menu">
-                <li class="<?=@$sub_page_active == 'pengumuman' ? 'active' : ''?>"">
-                    <a href="<?=site_url('pengumuman')?>">
-                        <i class="fa fa-circle-o"></i> Milik Saya
-                    </a>
-                </li>
-                <li class="<?=@$sub_page_active == 'pengumuman_saya' ? 'active' : ''?>"">
-                    <a href="<?=site_url('pengumuman/saya')?>">
-                        <i class="fa fa-circle-o"></i> Untuk Saya
-                    </a>
-                </li>
-            </ul>
-        </li>
+        <?php if(!in_array($login_level,array('user kantin'))){ ?>
+            <li class="<?=@$page_active == 'monitoring' ? 'active open' : "" ?>">
+                <a href="<?=site_url('monitoring')?>">
+                    <i class="fa fa-bullseye"></i> <span>Monitoring</span>
+                </a>
+            </li>
+            <li class="treeview <?=@$page_active == 'pesan' ? 'active' : ''?>">
+                <a href="#">
+                    <i class="fa fa-envelope"></i>
+                    <span>Pesan</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="<?=@$sub_page_active == 'pesan_kotak' ? 'active' : ''?>"">
+                        <a href="<?=site_url('pesan_kotak')?>">
+                            <i class="fa fa-circle-o"></i> Kotak Pesan
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'pesan_broadcast' ? 'active' : ''?>"">
+                        <a href="<?=site_url('pesan_broadcast')?>">
+                            <i class="fa fa-circle-o"></i> Kirim Broadcast
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'pesan_langsung' ? 'active' : ''?>"">
+                        <a href="<?=site_url('pesan_langsung')?>">
+                            <i class="fa fa-circle-o"></i> Kirim Direct Message
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview <?=@$page_active == 'pengumuman' ? 'active' : ''?>">
+                <a href="#">
+                    <i class="fa fa-info-circle"></i>
+                    <span>Pengumuman</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="<?=@$sub_page_active == 'pengumuman' ? 'active' : ''?>"">
+                        <a href="<?=site_url('pengumuman')?>">
+                            <i class="fa fa-circle-o"></i> Milik Saya
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'pengumuman_saya' ? 'active' : ''?>"">
+                        <a href="<?=site_url('pengumuman/saya')?>">
+                            <i class="fa fa-circle-o"></i> Untuk Saya
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        <?php } ?>
         <?php if(in_array($login_level, array('administrator'))){ ?>
         <li class="treeview <?=@$page_active == 'mata_pelajaran' ? 'active' : ''?>">
             <a href="#">
@@ -121,42 +125,44 @@
         
 
         <!-- Menu pelanggaran siswa -->
-        <li class="treeview <?=@$page_active == 'pelanggaran' ? 'active' : ''?>">
-            <a href="#">
-                <i class="fa fa-book"></i>
-                <span>Pelanggaran</span>
-                <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                </span>
-            </a>
-            <ul class="treeview-menu">
-                <li class="<?=@$sub_page_active == 'pelanggaran' ? 'active' : ''?>"">
-                    <a href="<?=site_url('pelanggaran')?>">
-                        <i class="fa fa-book"></i> Data Pelanggaran
-                    </a>
-                </li>
-                <li class="<?=@$sub_page_active == 'kategori' ? 'active' : ''?>"">
-                    <a href="<?=site_url('kategori')?>">
-                        <i class="fa fa-tag"></i> Kategori Pelanggaran
-                    </a>
-                </li>
-				<li class="<?=@$sub_page_active == 'subkategori' ? 'active' : ''?>"">
-                    <a href="<?=site_url('subkategori')?>">
-                        <i class="fa fa-tag"></i> Sub Kategori Pelanggaran
-                    </a>
-                </li>
-				 <li class="<?=@$sub_page_active == 'pelanggaran/laporan' ? 'active' : ''?>"">
-                    <a href="<?=site_url('pelanggaran/laporan')?>">
-                        <i class="fa fa-print"></i> Laporan
-                    </a>
-                </li>
-				<li class="<?=@$sub_page_active == 'pelanggaran/laporan_per_siswa' ? 'active' : ''?>"">
-                    <a href="<?=site_url('pelanggaran/laporan_per_siswa')?>">
-                        <i class="fa fa-print"></i> Laporan Per Siswa
-                    </a>
-                </li>
-            </ul>
-        </li>
+        <?php if(!in_array($login_level,array('user kantin'))){ ?>
+            <li class="treeview <?=@$page_active == 'pelanggaran' ? 'active' : ''?>">
+                <a href="#">
+                    <i class="fa fa-book"></i>
+                    <span>Pelanggaran</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="<?=@$sub_page_active == 'pelanggaran' ? 'active' : ''?>"">
+                        <a href="<?=site_url('pelanggaran')?>">
+                            <i class="fa fa-book"></i> Data Pelanggaran
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'kategori' ? 'active' : ''?>"">
+                        <a href="<?=site_url('kategori')?>">
+                            <i class="fa fa-tag"></i> Kategori Pelanggaran
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'subkategori' ? 'active' : ''?>"">
+                        <a href="<?=site_url('subkategori')?>">
+                            <i class="fa fa-tag"></i> Sub Kategori Pelanggaran
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'pelanggaran/laporan' ? 'active' : ''?>"">
+                        <a href="<?=site_url('pelanggaran/laporan')?>">
+                            <i class="fa fa-print"></i> Laporan
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'pelanggaran/laporan_per_siswa' ? 'active' : ''?>"">
+                        <a href="<?=site_url('pelanggaran/laporan_per_siswa')?>">
+                            <i class="fa fa-print"></i> Laporan Per Siswa
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        <?php } ?>
         <?php if(in_array($login_level, array('administrator', 'kepala sekolah', 'operator sekolah'))){ ?>        
             <li class="treeview <?=@$page_active == 'keuangan' ? 'active' : ''?>">
                 <a href="#">
@@ -196,43 +202,44 @@
             </li>
         <?php } ?>
         <!-- End Of menu pelanggaran siswa -->
-
-        <li class="treeview <?=@$page_active == 'laporan' ? 'active' : ''?>">
-            <a href="#">
-                <i class="fa fa-check"></i>
-                <span>Absensi</span>
-                <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                </span>
-            </a>
-            <ul class="treeview-menu">
-                <li class="<?=@$sub_page_active == 'verifikasi_dispensasi' ? 'active' : ''?>"">
-                    <a href="<?=site_url('verifikasi_dispensasi')?>">
-                        <i class="fa fa-circle-o"></i> Dispensasi
-                    </a>
-                </li>
-                <li class="<?=@$sub_page_active == 'verifikasi_absensi' ? 'active' : ''?>"">
-                    <a href="<?=site_url('verifikasi_absensi')?>">
-                        <i class="fa fa-circle-o"></i> Verifikasi
-                    </a>
-                </li>
-                <li class="<?=@$sub_page_active == 'absensi_laporan_bulanan' ? 'active' : ''?>"">
-                    <a href="<?=site_url('absensi_laporan_bulanan')?>">
-                        <i class="fa fa-circle-o"></i> Laporan Bulanan
-                    </a>
-                </li>
-                <li class="<?=@$sub_page_active == 'absensi_laporan_periode' ? 'active' : ''?>"">
-                    <a href="<?=site_url('absensi_laporan_periode')?>">
-                        <i class="fa fa-circle-o"></i> Laporan Periode
-                    </a>
-                </li>
-                <li class="<?=@$sub_page_active == 'rekap_absensi' ? 'active' : ''?>"">
-                    <a href="<?=site_url('rekap_absensi')?>">
-                        <i class="fa fa-circle-o"></i> Rekap Absensi
-                    </a>
-                </li>
-            </ul>
-        </li>
+        <?php if(!in_array($login_level,array('user kantin'))){ ?>
+            <li class="treeview <?=@$page_active == 'laporan' ? 'active' : ''?>">
+                <a href="#">
+                    <i class="fa fa-check"></i>
+                    <span>Absensi</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="<?=@$sub_page_active == 'verifikasi_dispensasi' ? 'active' : ''?>"">
+                        <a href="<?=site_url('verifikasi_dispensasi')?>">
+                            <i class="fa fa-circle-o"></i> Dispensasi
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'verifikasi_absensi' ? 'active' : ''?>"">
+                        <a href="<?=site_url('verifikasi_absensi')?>">
+                            <i class="fa fa-circle-o"></i> Verifikasi
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'absensi_laporan_bulanan' ? 'active' : ''?>"">
+                        <a href="<?=site_url('absensi_laporan_bulanan')?>">
+                            <i class="fa fa-circle-o"></i> Laporan Bulanan
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'absensi_laporan_periode' ? 'active' : ''?>"">
+                        <a href="<?=site_url('absensi_laporan_periode')?>">
+                            <i class="fa fa-circle-o"></i> Laporan Periode
+                        </a>
+                    </li>
+                    <li class="<?=@$sub_page_active == 'rekap_absensi' ? 'active' : ''?>"">
+                        <a href="<?=site_url('rekap_absensi')?>">
+                            <i class="fa fa-circle-o"></i> Rekap Absensi
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        <?php } ?>
         <?php if(in_array($login_level, array('administrator'))){ ?>
             <li class="<?=@$page_active == 'manajemen_sekolah' ? 'active open' : "" ?>">
                 <a href="<?=site_url('profil_sekolah')?>">
@@ -381,11 +388,16 @@
             </li>
         <?php } ?>
 
-        <?php if(in_array($login_level, array('administrator'))||in_array($login_level, array('operator sekolah'))){ ?>
+        <?php if(in_array($login_level, array('administrator'))||in_array($login_level, array('user kantin'))||in_array($login_level, array('operator sekolah'))){ ?>
+        <li class="<?=@$page_active == 'dashboard_kantin' ? 'active open' : "" ?>">
+            <a href="<?=site_url('kantin')?>">
+                <i class="fa fa-get-pocket"></i> <span>Dashboard Kantin</span>
+            </a>
+        </li>
         <li class="treeview <?=@$page_active == 'kantin' ? 'active' : ''?>">
             <a href="#">
                 <i class="fa fa-sellsy"></i>
-                <span>Produk Kantin</span>
+                <span>Kantin</span>
                 <span class="pull-right-container">
                     <i class="fa fa-angle-left pull-right"></i>
                 </span>
@@ -401,6 +413,18 @@
                         <i class="fa fa-circle-o"></i> Riwayat Transaksi
                     </a>
                 </li>
+                <li class="<?=@$sub_page_active == 'laporan' ? 'active' : ''?>"">
+                    <a href="<?=site_url('riwayat_produk_kantin/laporan')?>">
+                        <i class="fa fa-circle-o"></i> Laporan Harian
+                    </a>
+                </li>
+            <?php if(!in_array($login_level,array('user kantin'))){ ?>
+                <li class="<?=@$sub_page_active == 'manajemen_user_kantin' ? 'active' : ''?>"">
+                    <a href="<?=site_url('manajemen_user_kantin')?>">
+                        <i class="fa fa-circle-o"></i> Manajemen User Kantin
+                    </a>
+                </li>
+            <?php } ?>
             </ul>
         </li>
         <?php } ?>
