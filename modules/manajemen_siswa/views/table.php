@@ -1,7 +1,7 @@
 <div class="box box-primary">
     <div class="box-header with-border">
     	<h3 class="box-title">
-            <i class="fa fa-users"></i>&nbsp;&nbsp;&nbsp;Manajemen Siswa
+            <i class="fa fa-users"></i>&nbsp;&nbsp;&nbsp;Manajemen Siswa 
         </h3>
     </div>
     <div class="box-body">
@@ -67,7 +67,8 @@
                         <th class="col-md-2">Kelas</th>
                         <th class="col-md-2">NIS</th>
 						<th class="">Nama</th>
-                        <th class="col-md-2">No. Handphone</th>
+                        <th class="col-md-2">No. HP Siswa</th>
+                        <th class="col-md-2">No. HP Orangtua</th>
 					</tr>
 				</thead>
                                 <?php echo form_open('manajemen_siswa/remove'); ?>
@@ -88,6 +89,7 @@
                                 <td><?=$c->nis?></td>
                                 <td><?=$c->nama?></td>
                                 <td><?=$c->no_hp?></td>
+                                <td><?=$c->no_hp_ortu?></td>
 							</tr>
 						<?php endforeach; ?>
 					<?php } else { ?>
