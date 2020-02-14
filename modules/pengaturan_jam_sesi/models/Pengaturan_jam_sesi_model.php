@@ -53,7 +53,7 @@ class Pengaturan_jam_sesi_model extends CI_Model
 		if($level_user == 'kepala sekolah')
 		{
 			$this->db->where('x.user_id', $id_user);
-			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = e.sekolah_id');
+			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = c.sekolah_id');
 		}
 		elseif($level_user == 'operator sekolah')
 		{
@@ -64,7 +64,7 @@ class Pengaturan_jam_sesi_model extends CI_Model
 		{
 			$this->db->where('c.user_id', $id_user);
 			$this->db->where('x.user_id', $id_user);
-			$this->db->join('user_guru x', 'x.sekolah_id = e.sekolah_id');			
+			$this->db->join('user_guru x', 'x.sekolah_id = c.sekolah_id');			
 		}
 		$get = $this->db->get();
 		return $get;
