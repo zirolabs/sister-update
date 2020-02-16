@@ -59,12 +59,6 @@ class Keuangan_master_model extends CI_Model
 		$this->db->from('keuangan_master a');
 		$this->db->join('profil_sekolah c', 'a.sekolah_id = c.sekolah_id');
 
-		if($level_user == 'kepala sekolah')
-		{
-			$this->db->where('x.user_id', $id_user);
-			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = c.sekolah_id');
-		}
-
 		$get = $this->db->get();
 		return $get;
 	}
