@@ -7,8 +7,8 @@ class Pengaturan_jurusan extends CI_Controller
 		parent::__construct();
 		$this->login_status 	= $this->session->userdata('login_status');
 		$this->login_uid 		= $this->session->userdata('login_uid');
-		if($this->login_status != 'ok')
-		{
+		$this->login_level 		= $this->session->userdata('login_level');
+		if($this->login_level != 'administrator'){
 			$this->session->set_flashdata('msg', err_msg('Silahkan login untuk melanjutkan.'));
 			redirect(site_url('login'));
 		}

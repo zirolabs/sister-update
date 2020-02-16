@@ -8,7 +8,12 @@ class Mata_pelajaran extends CI_Controller
 		$this->login_status 	= $this->session->userdata('login_status');
 		$this->login_uid 		= $this->session->userdata('login_uid');
 		$this->login_level 		= $this->session->userdata('login_level');
-		if($this->login_status != 'ok')
+		$cek = FALSE;
+		if($this->login_level == 'operator sekolah' || $this->login_level == 'administrator' || $this->login_level == 'guru' || $this->login_level == 'kepala sekolah'){
+			$cek = TRUE;
+		}
+
+		if($cek != TRUE)
 		{
 			$this->session->set_flashdata('msg', err_msg('Silahkan login untuk melanjutkan.'));
 			redirect(site_url('login'));

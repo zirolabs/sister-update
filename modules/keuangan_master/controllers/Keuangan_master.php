@@ -7,7 +7,13 @@ class Keuangan_master extends CI_Controller
 		parent::__construct();
 		$this->login_status 	= $this->session->userdata('login_status');
 		$this->login_uid 		= $this->session->userdata('login_uid');
-		if($this->login_status != 'ok')
+		$this->login_level 		= $this->session->userdata('login_level');
+		$cek = FALSE;
+		if($this->login_level == 'operator sekolah' || $this->login_level == 'administrator' || $this->login_level == 'kepala sekolah'){
+			$cek = TRUE;
+		}
+
+		if($cek != TRUE)
 		{
 			$this->session->set_flashdata('msg', err_msg('Silahkan login untuk melanjutkan.'));
 			redirect(site_url('login'));
