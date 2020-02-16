@@ -94,7 +94,7 @@ class Jurnal_guru_model extends CI_Model
 		elseif($level_user == 'operator sekolah')
 		{
 			$this->db->where('x.user_id', $id_user);
-			$this->db->join('user_operator x', 'x.sekolah_id = c.sekolah_id');
+			$this->db->join('user_operator x', 'x.sekolah_id = e.sekolah_id');
 		}
 		elseif($level_user == 'guru')
 		{
