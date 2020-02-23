@@ -1,1 +1,2 @@
 vendor/codeigniter/framework/system/cache/*
+application/config/*
