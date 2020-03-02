@@ -23,7 +23,7 @@ class Absensi_laporan_bulanan extends CI_Controller
 		$this->load->model('verifikasi_absensi/verifikasi_absensi_model');
 		$this->load->model('profil_sekolah/profil_sekolah_model');
 		$this->load->model('pengaturan_kelas/pengaturan_kelas_model');
-
+		$this->load->model('manajemen_siswa/manajemen_siswa_model');
 		$this->page_active 		= 'laporan';
 		$this->sub_page_active 	= 'absensi_laporan_bulanan';
 	}
@@ -49,13 +49,16 @@ class Absensi_laporan_bulanan extends CI_Controller
 
 		$uri_segment		= 3;
 		$limit 				= 25;
+		if(!empty($param['kelas'])){
+			$limit = 40;
+		}
 		$param['limit']		= $limit;
-		$param['offset']	= $this->uri->segment($uri_segment);		
-		$param['data']		= $this->absensi_laporan_bulanan_model->get_data($param)->result();
-
+		$param['offset']	= $this->uri->segment($uri_segment);
+		$param['data']			= $this->manajemen_siswa_model->get_data($param)->result();
+		$param['kehadiran']	= $this->absensi_laporan_bulanan_model;
 		unset($param['limit']);
 		unset($param['offset']);
-		$total_rows 			= $this->absensi_laporan_bulanan_model->get_data($param)->num_rows();
+		$total_rows 			= $this->manajemen_siswa_model->get_data($param)->num_rows();
 		$param['pagination']	= paging('absensi_laporan_bulanan/index', $total_rows, $limit, $uri_segment);				
 
 		$param['opt_sekolah']	= $this->profil_sekolah_model->get_opt('Semua Sekolah');

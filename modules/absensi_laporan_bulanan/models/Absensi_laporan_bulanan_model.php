@@ -57,6 +57,7 @@ class Absensi_laporan_bulanan_model extends CI_Model
 
 		$this->db->order_by('b.nama, c.nis');
 		$this->db->select('
+			a.user_id,
 			b.nama, 
 			c.nis,
 			b.foto' . 
@@ -87,6 +88,21 @@ class Absensi_laporan_bulanan_model extends CI_Model
 			$this->db->join('master_kelas x2', 'x2.kelas_id = c.kelas_id');			
 		}
 
+		$query = $this->db->get();
+		return $query;
+	}
+
+	function get_kehadiran($user_id,$bulan,$tahun)
+	{
+
+				$this->db->where('a.user_id', $user_id);
+				$this->db->where('MONTH(a.waktu)', $bulan);				
+				$this->db->where('YEAR(a.waktu)', $tahun);									
+		$this->db->distinct();
+		$this->db->select('
+			DAY(a.waktu) as tanggal,a.status'
+		);
+		$this->db->from('absensi a');
 		$query = $this->db->get();
 		return $query;
 	}
