@@ -61,7 +61,7 @@
                         <th class="col-md-2">Sekolah</th>
                         <th>Keterangan</th>
                         <th class="col-md-2">Uploader</th>
-                        <th class="col-md-2">Kelas</th>
+                        <!-- <th class="col-md-2">Kelas</th> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -73,10 +73,11 @@
                                         <a href="<?=site_url('mata_pelajaran/form/' . $c->materi_id)?>" class="btn btn-default btn-xs" title="Perbaharui / Update">
                                             <i class="fa fa-edit"></i>
                                         </a>
+                                        <a onclick="confirm_hapus('<?=$c->materi_id?>')" class="btn btn-default btn-xs" title="Hapus">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
                                     <?php } ?>
-                                    <a onclick="confirm_hapus('<?=$c->materi_id?>')" class="btn btn-default btn-xs" title="Hapus">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
+                                    
 								</td>
                                 <td><?=$c->nama_sekolah?></td>
                                 <td>
@@ -91,11 +92,6 @@
                                     <?php } ?>
                                 </td>
                                 <td><?=$c->nama_uploader?><br/>@<?=format_tanggal_indonesia($c->waktu_upload, true)?></td>
-                                <td>
-                                    <?php foreach ($c->kelas as $key => $c) : ?>
-                                        <?=$c->nama?> <i class="fa fa-check"></i><br/>
-                                    <?php endforeach; ?>
-                                </td>
 							</tr>
 						<?php endforeach; ?>
 					<?php } else { ?>

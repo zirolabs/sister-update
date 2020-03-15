@@ -114,6 +114,7 @@ class Mata_pelajaran extends CI_Controller
 	{
 		$data_post = $this->input->post();
 		$this->form_validation->set_rules('judul', 'Judul', 'required');
+		$this->form_validation->set_rules('keterangan', 'Deskripsi', 'required');
 		$this->form_validation->set_rules('mata_pelajaran_id', 'Mata Pelajaran', 'required');
 		if($this->form_validation->run() == false)
 		{
@@ -145,7 +146,7 @@ class Mata_pelajaran extends CI_Controller
 	            	$data_upload 		 	  = $this->upload->data();
 	            	$data_post['lokasi_file'] = $config['upload_path'] . $data_upload['file_name'];
 	            }
-			}			
+			}		
 
 			// $list_kelas = $data_post['kelas'];
 			// unset($data_post['kelas']);

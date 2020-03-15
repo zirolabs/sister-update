@@ -91,8 +91,8 @@
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li class="<?=@$sub_page_active == 'mata_pelajaran_materi' ? 'active' : ''?>"">
-                    <a href="<?=site_url('mata_pelajaran_materi')?>">
+                <li class="<?=@$sub_page_active == 'mata_pelajaran' ? 'active' : ''?>"">
+                    <a href="<?=site_url('mata_pelajaran')?>">
                         <i class="fa fa-circle-o"></i> Materi
                     </a>
                 </li>
@@ -104,7 +104,7 @@
             </ul>
         </li>
         <?php } ?>
-        <?php if(in_array($login_level, array('operator sekolah'))||in_array($login_level, array('guru'))){ ?>
+        <?php if(in_array($login_level, array('operator sekolah'))||in_array($login_level, array('guru'))||in_array($login_level, array('kepala sekolah'))){ ?>
         <li class="treeview <?=@$page_active == 'mata_pelajaran' ? 'active' : ''?>">
             <a href="#">
                 <i class="fa fa-book"></i>

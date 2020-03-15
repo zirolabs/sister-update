@@ -4,6 +4,9 @@ class Mata_pelajaran_materi_model extends CI_Model
 {
 	function get_data($param = array())
 	{
+		$level_user 	= $this->session->userdata('login_level');
+		$id_user 	 	= $this->session->userdata('login_uid');
+
 		if(!empty($param))
 		{
 			if(!empty($param['limit']))
@@ -21,11 +24,6 @@ class Mata_pelajaran_materi_model extends CI_Model
 			if(!empty($param['keyword']))
 			{
 				$this->db->like('a.judul', $param['keyword']);
-			}
-
-			if(!empty($param['guru_id']))
-			{
-				$this->db->where('a.user_id', $param['guru_id']);
 			}
 
 			if(!empty($param['sekolah']))
@@ -57,6 +55,21 @@ class Mata_pelajaran_materi_model extends CI_Model
 		$this->db->join('master_mata_pelajaran b', 'a.mata_pelajaran_id = b.mata_pelajaran_id');
 		$this->db->join('profil_sekolah c', 'c.sekolah_id = a.sekolah_id');
 		$this->db->join('user d', 'd.user_id = a.user_id');
+		if($level_user == 'kepala sekolah')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = c.sekolah_id');
+		}
+		elseif($level_user == 'operator sekolah')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_operator x', 'x.sekolah_id = c.sekolah_id');
+		}
+		elseif($level_user == 'guru')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_guru x', 'x.sekolah_id = c.sekolah_id');
+		}
 		$get = $this->db->get();
 		return $get;
 	}
