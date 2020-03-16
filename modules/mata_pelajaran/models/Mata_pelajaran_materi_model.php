@@ -70,6 +70,11 @@ class Mata_pelajaran_materi_model extends CI_Model
 			$this->db->where('x.user_id', $id_user);
 			$this->db->join('user_guru x', 'x.sekolah_id = c.sekolah_id');
 		}
+		elseif($level_user == 'siswa')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_siswa x', 'x.sekolah_id = c.sekolah_id');
+		}
 		$get = $this->db->get();
 		return $get;
 	}

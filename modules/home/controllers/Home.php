@@ -11,23 +11,28 @@ class Home extends CI_Controller
 		$this->login_level 		= $this->session->userdata('login_level');
 		$cek = FALSE;
 		$kantin = FALSE;
+		$siswa = FALSE;
+
 		if($this->login_level == 'operator sekolah' || $this->login_level == 'administrator' || $this->login_level == 'guru' || $this->login_level == 'kepala sekolah'){
 			$cek = TRUE;
-			$kantin = FALSE;
 		}elseif($this->login_level == 'user kantin'){
 			$kantin = TRUE;
+			$cek = TRUE;
+		}elseif($this->login_level == 'siswa'){
+			$siswa = TRUE;
+			$cek = TRUE;
 		}
 
 		if($cek != TRUE)
 		{	
-			if($kantin != TRUE){
 				$this->session->set_flashdata('msg', err_msg('Silahkan login untuk melanjutkan.'));
 				redirect(site_url('login'));
-			}else
-			{
-				redirect(site_url('kantin'));
-			}
-			
+		}elseif($kantin == TRUE )
+		{
+			redirect(site_url('kantin'));
+		}elseif($siswa == TRUE )
+		{
+			redirect(site_url('mata_pelajaran'));
 		}
 
 		$this->page_active = 'home';

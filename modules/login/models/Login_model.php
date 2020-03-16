@@ -15,7 +15,9 @@ class Login_model extends CI_Model {
 			c.kepsek_id,
 			d.siswa_id
 		');
-		$this->db->where('a.level != ', 'siswa');
+		// untuk menonaktifkan user siswa
+		// $this->db->where('a.level != ', 'siswa');
+
 		$this->db->where("(a.username LIKE '%$email%' OR a.email LIKE '%$email%')");
 		$this->db->from('user a');
 		$this->db->join('user_guru b', 'a.user_id = b.user_id', 'left');

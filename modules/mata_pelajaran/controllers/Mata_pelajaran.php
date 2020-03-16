@@ -9,7 +9,7 @@ class Mata_pelajaran extends CI_Controller
 		$this->login_uid 		= $this->session->userdata('login_uid');
 		$this->login_level 		= $this->session->userdata('login_level');
 		$cek = FALSE;
-		if($this->login_level == 'operator sekolah' || $this->login_level == 'administrator' || $this->login_level == 'guru' || $this->login_level == 'kepala sekolah'){
+		if($this->login_level == 'operator sekolah' || $this->login_level == 'administrator' || $this->login_level == 'guru' || $this->login_level == 'kepala sekolah' || $this->login_level == 'siswa'){
 			$cek = TRUE;
 		}
 
@@ -44,11 +44,6 @@ class Mata_pelajaran extends CI_Controller
 			'kelas'				=> $param['kelas'],
 			'mata_pelajaran'	=> $param['mata_pelajaran']
 		);
-
-		if($this->login_level == 'guru')
-		{
-			$filter['guru_id'] = $this->login_uid;
-		}
 
 		$param['data']	= $this->mata_pelajaran_materi_model->get_data($filter)->result();
 		foreach($param['data'] as $key => $c)

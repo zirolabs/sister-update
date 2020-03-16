@@ -9,7 +9,7 @@ class Riwayat_produk_kantin extends CI_Controller
 		$this->login_uid 		= $this->session->userdata('login_uid');
 		$this->login_level 		= $this->session->userdata('login_level');
 		$cek = FALSE;
-		if($this->login_level == 'operator sekolah' || $this->login_level == 'administrator' || $this->login_level == 'user kantin'){
+		if($this->login_level == 'operator sekolah' || $this->login_level == 'administrator' || $this->login_level == 'user kantin' || $this->login_level == 'siswa'){
 			$cek = TRUE;
 		}
 
@@ -47,6 +47,11 @@ class Riwayat_produk_kantin extends CI_Controller
 			'sekolah'			=> $param['sekolah'],
 			'jenis_transaksi'	=> 'Transaksi di Kantin.',
 		);
+
+		if($this->login_level == 'siswa')
+		$filter = array(
+			'user_id' => $this->login_uid
+		); 
 
 		$param['data'] 		 = $this->riwayat_produk_kantin_model->get_data($filter)->result();
 

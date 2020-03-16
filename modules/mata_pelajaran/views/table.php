@@ -7,16 +7,18 @@
     <div class="box-body">
         <form method="GET" action="<?=site_url('mata_pelajaran')?>">
         	<div class="row">
-                <div class="col-md-2">
-                    <div class="form-group" style="margin-bottom: 0px;">
-                        <label>&nbsp;</label>
-                        <div class="input-group">
-                            <a href="<?=site_url('mata_pelajaran/form')?>" class="btn btn-default">
-                                <i class="fa fa-plus hidden-xs"></i> Upload Baru
-                            </a>
+                <?php if($this->login_level != 'siswa'){?>
+                    <div class="col-md-2">
+                        <div class="form-group" style="margin-bottom: 0px;">
+                            <label>&nbsp;</label>
+                            <div class="input-group">
+                                <a href="<?=site_url('mata_pelajaran/form')?>" class="btn btn-default">
+                                    <i class="fa fa-plus hidden-xs"></i> Upload Baru
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php } ?>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Sekolah</label>
@@ -56,8 +58,10 @@
         <div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
 				<thead>
-					<tr>
-						<th class="col-md-1"></th>
+					<tr>                
+                        <?php if($this->login_level != 'siswa'){?>
+                            <th class="col-md-1"></th>
+                        <?php } ?>
                         <th class="col-md-2">Sekolah</th>
                         <th>Keterangan</th>
                         <th class="col-md-2">Uploader</th>
@@ -68,17 +72,19 @@
 					<?php if(!empty($data)){ ?>
 						<?php foreach($data as $key => $c): ?>
 							<tr>
-								<td class="text-center">
-                                    <?php if($c->user_id == $this->login_uid){ ?>
-                                        <a href="<?=site_url('mata_pelajaran/form/' . $c->materi_id)?>" class="btn btn-default btn-xs" title="Perbaharui / Update">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                        <a onclick="confirm_hapus('<?=$c->materi_id?>')" class="btn btn-default btn-xs" title="Hapus">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    <?php } ?>
-                                    
-								</td>
+                                <?php if($this->login_level != 'siswa'){?>
+                                    <td class="text-center">
+                                        <?php if($c->user_id == $this->login_uid){ ?>
+                                            <a href="<?=site_url('mata_pelajaran/form/' . $c->materi_id)?>" class="btn btn-default btn-xs" title="Perbaharui / Update">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a onclick="confirm_hapus('<?=$c->materi_id?>')" class="btn btn-default btn-xs" title="Hapus">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        <?php } ?>
+                                        
+                                    </td>
+                                <?php } ?>
                                 <td><?=$c->nama_sekolah?></td>
                                 <td>
                                     Mata Pelajaran : <b><?=$c->nama_mata_pelajaran?></b><br/>

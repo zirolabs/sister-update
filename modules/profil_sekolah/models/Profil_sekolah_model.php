@@ -216,6 +216,12 @@ class Profil_sekolah_model extends CI_Model
 				$level_user = 'user_kantin';
 				$id_user 	= $param['user_kantin'];
 			}
+
+			if(!empty($param['siswa']))
+			{
+				$level_user = 'siswa';
+				$id_user 	= $param['siswa'];
+			}
 		}
 
 		if($level_user == 'kepala sekolah')
@@ -237,6 +243,11 @@ class Profil_sekolah_model extends CI_Model
 		{
 			$this->db->where('user_kantin.user_id', $id_user);
 			$this->db->join('user_kantin', 'user_kantin.sekolah_id = profil_sekolah.sekolah_id');			
+		}
+		elseif($level_user == 'siswa')
+		{
+			$this->db->where('user_siswa.user_id', $id_user);
+			$this->db->join('user_siswa', 'user_siswa.sekolah_id = profil_sekolah.sekolah_id');			
 		}
 		else
 		{

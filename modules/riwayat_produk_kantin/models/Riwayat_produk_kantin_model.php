@@ -42,6 +42,11 @@ class Riwayat_produk_kantin_model extends CI_Model
 				$this->db->where('a.mutasi_id', $param['mutasi_id']);
 			}
 
+			if(!empty($param['user_id']))
+			{
+				$this->db->where('a.user_id', $param['user_id']);
+			}
+
 		}
 
 		$this->db->select("

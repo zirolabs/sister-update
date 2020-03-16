@@ -7,7 +7,7 @@
     <div class="box-body">
         <form method="GET" action="<?=site_url('riwayat_produk_kantin')?>">
         	<div class="row">
-                <div class="col-md-3 col-md-offset-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Sekolah</label>
                         <?=form_dropdown('sekolah', $opt_sekolah, $sekolah, 'class="form-control"')?>
