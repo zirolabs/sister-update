@@ -61,7 +61,7 @@
                         <th class="col-md-2">Sekolah</th>
                         <th>Keterangan</th>
                         <th class="col-md-2">Uploader</th>
-                        <!-- <th class="col-md-2">Kelas</th> -->
+                        <th class="col-md-2">Kelas</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -92,7 +92,12 @@
                                     <?php } ?>
                                 </td>
                                 <td><?=$c->nama_uploader?><br/>@<?=format_tanggal_indonesia($c->waktu_upload, true)?></td>
-							</tr>
+                                <td>
+                                    <?php foreach ($c->kelas as $key => $c) : ?>
+                                        <?=$c->nama?> <i class="fa fa-check"></i><br/>
+                                    <?php endforeach; ?>
+                                </td>
+                            </tr>
 						<?php endforeach; ?>
 					<?php } else { ?>
 						<tr>
@@ -142,7 +147,7 @@
     function get_kelas()
     {
         $.ajax({
-            url     : "<?=site_url('mata_pelajaran_/ajax_kelas?selected=' . @$kelas . '&sekolah_id=')?>" + $('select[name="sekolah"]').val(),
+            url     : "<?=site_url('mata_pelajaran/ajax_kelas?selected=' . @$kelas . '&sekolah_id=')?>" + $('select[name="sekolah"]').val(),
             method  : 'GET',
             success : function(result){
                 $('#area_kelas').html(result);

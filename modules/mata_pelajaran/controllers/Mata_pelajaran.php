@@ -148,8 +148,8 @@ class Mata_pelajaran extends CI_Controller
 	            }
 			}		
 
-			// $list_kelas = $data_post['kelas'];
-			// unset($data_post['kelas']);
+			$list_kelas = $data_post['kelas'];
+			unset($data_post['kelas']);
 
 			$data_post['user_id']	   = $this->login_uid;
 			$data_post['waktu_upload'] = date('Y-m-d H:i:s');
@@ -173,22 +173,22 @@ class Mata_pelajaran extends CI_Controller
 				$this->session->set_flashdata('msg', suc_msg('Data berhasil diperbaharui.'));
 			}
 
-			// if(!empty($id))
-			// {
-			// 	$this->mata_pelajaran_materi_model->delete_kelas($id);
-			// 	foreach($list_kelas as $key => $c)
-			// 	{
-			// 		$param_kelas[]	= array(
-			// 			'materi_id'	=> $id,
-			// 			'kelas_id'	=> $c
-			// 		);
-			// 	}
+			if(!empty($id))
+			{
+				$this->mata_pelajaran_materi_model->delete_kelas($id);
+				foreach($list_kelas as $key => $c)
+				{
+					$param_kelas[]	= array(
+						'materi_id'	=> $id,
+						'kelas_id'	=> $c
+					);
+				}
 
-			// 	if(!empty($param_kelas))
-			// 	{
-			// 		$this->mata_pelajaran_materi_model->insert_kelas($param_kelas);
-			// 	}
-			// }
+				if(!empty($param_kelas))
+				{
+					$this->mata_pelajaran_materi_model->insert_kelas($param_kelas);
+				}
+			}
 		}
 		redirect('mata_pelajaran');
 	}

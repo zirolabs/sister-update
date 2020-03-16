@@ -34,6 +34,12 @@
 				        	<textarea class="form-control" rows="5" name="keterangan"><?=@$data->keterangan?></textarea>
 				        </div>
 				    </div>
+					<!-- <div class="form-group">
+				        <label class="col-md-2 control-label">Jenis</label>
+				        <div class="col-md-3">
+				        	<?=form_dropdown('jenis', array('materi' => 'Materi', 'tugas' => 'Tugas'), @$data->jenis, 'class="form-control"')?>
+				        </div>
+				    </div> -->
 					<div class="form-group">
 				        <label class="col-md-2 control-label">Upload File</label>
 					    <?php if(!empty($data->lokasi_file)){ ?>
@@ -49,11 +55,15 @@
 				    </div>
                     <hr/>
 					<div class="form-group">
-						<label class="col-md-2 control-label">Sekolah</label>
+				        <label class="col-md-2 control-label">Sekolah</label>
 				        <div class="col-md-5">
 				        	<?=form_dropdown('sekolah_id', $opt_sekolah, @$data->sekolah_id, 'class="form-control" onchange="load_kelas()"')?>
 				        </div>
 				    </div>                    
+					<div class="form-group">
+				        <label class="col-md-2 control-label">Kelas</label>
+				        <div class="col-md-9" id="respon-kelas"></div>
+				    </div>
                     <hr/>
 				    <div class="form-group">
 				        <div class="col-md-12 text-right">
@@ -80,7 +90,7 @@
 		<?php endforeach; } ?>
 
 		$.ajax({
-			url 		: "<?=site_url('mata_pelajaran_materi/ajax_form_kelas')?>",
+			url 		: "<?=site_url('mata_pelajaran/ajax_form_kelas')?>",
 			method		: "POST",
 			data 		: "sekolah=" + $('select[name="sekolah_id"]').val() + "&kelas=" + JSON.stringify(kelas),
 			success		: function(result){
