@@ -89,7 +89,7 @@ class Pengaturan_jadwal_pelajaran extends CI_Controller
 		$param['data_sekolah']			= $this->profil_sekolah_model->get_data_row($param['sekolah']);
 		$param['data_kelas']			= $this->pengaturan_kelas_model->get_data(array('kelas_id' => $param['kelas']))->row();
 
-		$get_guru = $this->manajemen_guru_model->get_data(array('sekolah' => $param['sekolah']))->result();
+		$get_guru = $this->manajemen_guru_model->get_data_guru(array('sekolah' => $param['sekolah']))->result();
 		$param['opt_guru']	= array();
 		foreach($get_guru as $key => $c)
 		{
