@@ -213,7 +213,7 @@ class Jurnal_guru extends CI_Controller
 				}
 			}
 		}
-		echo form_dropdown('kelas', $result, $selected, 'class="form-control"');		
+		echo form_dropdown('kelas_id', $result, $selected, 'class="form-control"');		
 	}
 
 }

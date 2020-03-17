@@ -118,17 +118,19 @@
 		$('#modal-hapus').modal();
 	}
 
-    function get_kelas(id)
+    function get_kelas()
     {
         $.ajax({
-            url     : "<?=site_url('monitoring/get_kelas?selected=' . @$kelas . '&sekolah_id=')?>" + id,
+            url     : "<?=site_url('jurnal_guru/ajax_kelas?selected=' . @$kelas . '&sekolah_id=')?>" + $('select[name="sekolah"]').val(),
             method  : 'GET',
             success : function(result){
                 $('#area_kelas').html(result);
             }
 
         });
-    }
+    }    
 
-    get_kelas($('select[name="sekolah"]').val());
+    $(document).ready(function(){
+        get_kelas();
+    }); 
 </script>

@@ -7,6 +7,7 @@ class Pengaturan_jadwal_pelajaran extends CI_Controller
 		parent::__construct();
 		$this->login_status 	= $this->session->userdata('login_status');
 		$this->login_level 		= $this->session->userdata('login_level');
+		$this->login_uid 		= $this->session->userdata('login_uid');
 		$cek = FALSE;
 		if($this->login_level == 'operator sekolah' || $this->login_level == 'administrator' || $this->login_level == 'guru' || $this->login_level == 'kepala sekolah'){
 			$cek = TRUE;
@@ -284,22 +285,27 @@ class Pengaturan_jadwal_pelajaran extends CI_Controller
 		$this->load->view('excel_kode', $param);
 	}
 
-	/* Ajax */
-	function ajax_kelas()
+	public function ajax_kelas()
 	{
 		$selected	= $this->input->get('selected');
-		$sekolah 	= $this->input->get('sekolah');
-
+		$sekolah_id = $this->input->get('sekolah_id');
 
 		$result[''] = 'Semua Kelas';
-		if(!empty($sekolah))
+		if(!empty($sekolah_id))
 		{
-			$result 	= $this->pengaturan_kelas_model->get_opt('Semua Kelas', $sekolah);
+			$filter = array('sekolah_id' => $sekolah_id);
+			$get_data_kelas = $this->pengaturan_kelas_model->get_data($filter)->result();
+
+			if(!empty($get_data_kelas))
+			{
+				foreach($get_data_kelas as $key => $c)
+				{
+					$result[$c->kelas_id] = $c->jenjang . ' ' . $c->nama_jurusan . ' ' . $c->nama;
+				}
+			}
 		}
-//                print_r($result);
-//                die;
 		echo form_dropdown('kelas', $result, $selected, 'class="form-control"');		
 	}
-	/* End Of Ajax */
+
 
 }

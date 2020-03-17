@@ -88,7 +88,8 @@ class Pengaturan_kelas_model extends CI_Model
 		}
 		elseif($level_user == 'guru')
 		{
-			$this->db->where('d.user_id', $id_user);
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_guru x', 'x.sekolah_id = c.sekolah_id');
 		}
 
 		$get = $this->db->get();

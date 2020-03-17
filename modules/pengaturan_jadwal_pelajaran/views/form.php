@@ -40,10 +40,10 @@
 				        	<?=form_dropdown('mata_pelajaran_id', $opt_mata_pelajaran, @$data->mata_pelajaran_id, 'class="form-control"')?>
 				        </div>
 				    </div>
-                                    <?php if(in_array($login_level, array('guru'))){ ?>
-                                    <input type="hidden" class="form-control" value="<?=$this->login_uid?>" name="user_id">
-                                    <?php }else{ ?>
-                                    <div class="form-group">
+					<?php if(in_array($login_level, array('guru'))){ ?>
+					<input type="hidden" name="user_id" class="form-control" value="<?=$this->login_uid?>">
+					<?php }else{ ?>
+					<div class="form-group">
 				        <label class="col-md-4 control-label">Guru</label>
 				        <div class="col-md-7">
 				        	<?=form_dropdown('user_id', $opt_guru, @$data->user_id, 'class="form-control"')?>

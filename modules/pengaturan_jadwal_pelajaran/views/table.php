@@ -127,18 +127,18 @@
   function get_kelas()
     {
         $.ajax({
-            url     : "<?=site_url('pengaturan_jadwal_pelajaran/ajax_kelas')?>?selected=<?=@$kelas?>&sekolah=" + $('select[name="sekolah"').val(),
+            url     : "<?=site_url('pengaturan_jadwal_pelajaran/ajax_kelas?selected=' . @$kelas . '&sekolah_id=')?>" + $('select[name="sekolah"]').val(),
             method  : 'GET',
             success : function(result){
                 $('#area_kelas').html(result);
             }
 
         });
-    }
+    }    
 
-    $('document').ready(function(){
+    $(document).ready(function(){
         get_kelas();
-    });
+    }); 
 
 	function confirm_hapus(id)
 	{
