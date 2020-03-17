@@ -125,7 +125,7 @@ class Jurnal_guru_model extends CI_Model
 		$this->db->join('master_mata_pelajaran b', 'a.mata_pelajaran_id = b.mata_pelajaran_id');
 		$this->db->join('user c', 'c.user_id = a.user_id');
 		$this->db->join('user_guru d', 'd.user_id = c.user_id');
-                $this->db->join('profil_sekolah g', 'g.sekolah_id = d.sekolah_id');
+        $this->db->join('profil_sekolah g', 'g.sekolah_id = d.sekolah_id');
 		$this->db->join('master_kelas e', 'e.kelas_id = a.kelas_id');
 		$this->db->join('master_jurusan f', 'f.jurusan_id = e.jurusan_id');
 		
@@ -134,20 +134,16 @@ class Jurnal_guru_model extends CI_Model
 		{
 			$this->db->where('x.user_id', $id_user);
 			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = e.sekolah_id');
-                        $this->db->join('profil_sekolah g', 'g.sekolah_id = x.sekolah_id');
 		}
 		elseif($level_user == 'operator sekolah')
 		{
 			$this->db->where('x.user_id', $id_user);
-			$this->db->join('user_operator x', 'x.sekolah_id = c.sekolah_id');
-                        $this->db->join('profil_sekolah g', 'g.sekolah_id = x.sekolah_id');
+			$this->db->join('user_operator x', 'x.sekolah_id = e.sekolah_id');
 		}
 		elseif($level_user == 'guru')
 		{
-			$this->db->where('c.user_id', $id_user);
 			$this->db->where('x.user_id', $id_user);
 			$this->db->join('user_guru x', 'x.sekolah_id = e.sekolah_id');
-                        $this->db->join('profil_sekolah g', 'g.sekolah_id = x.sekolah_id');
 		}
 		$get = $this->db->get();
 		return $get->row();
@@ -163,6 +159,7 @@ class Jurnal_guru_model extends CI_Model
 			c.nama as nama_guru,
 			d.nip as nip_guru,
                         j.id_jurnal,
+                        j.id_jadwal,
                         j.materi,
                         j.target,
                         j.siswa_hadir,
@@ -186,20 +183,17 @@ class Jurnal_guru_model extends CI_Model
 		{
 			$this->db->where('x.user_id', $id_user);
 			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = e.sekolah_id');
-                        $this->db->join('profil_sekolah g', 'g.sekolah_id = x.sekolah_id');
 		}
 		elseif($level_user == 'operator sekolah')
 		{
 			$this->db->where('x.user_id', $id_user);
-			$this->db->join('user_operator x', 'x.sekolah_id = c.sekolah_id');
-                        $this->db->join('profil_sekolah g', 'g.sekolah_id = x.sekolah_id');
+			$this->db->join('user_operator x', 'x.sekolah_id = e.sekolah_id');
 		}
 		elseif($level_user == 'guru')
 		{
-			$this->db->where('c.user_id', $id_user);
+
 			$this->db->where('x.user_id', $id_user);
 			$this->db->join('user_guru x', 'x.sekolah_id = e.sekolah_id');
-                        $this->db->join('profil_sekolah g', 'g.sekolah_id = x.sekolah_id');
 		}
 		$get = $this->db->get();
 		return $get;

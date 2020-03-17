@@ -45,10 +45,13 @@
                                     <?=$c->keterangan?>
                                 </td>
                                 <td>  
-                                    <?php if(!empty($c->id_jurnal)){ ?>
-                                    <a href="<?=site_url('jurnal_guru/hapus/'. $c->id_jurnal)?>" class="btn btn-default btn-xs" title="hapus Jurnal">
-    										<i class="fa fa-minus"></i>
-    					<?php } ?>				</a>
+                                    <?php if(!empty($c->id_jurnal)&&$c->user_id==$this->login_uid){ ?>
+                                        <form action="<?=site_url('jurnal_guru/hapus/')?>" method="POST">
+                                            <input type="hidden" name="id_jurnal" value="<?=$c->id_jurnal ?>">
+                                            <input type="hidden" name="id_jadwal" value="<?=$c->id_jadwal ?>">
+                                            <button class="btn btn-default btn-xs" title="hapus Jurnal"><i class="fa fa-minus"></i></button>
+                                        </form>
+    					            <?php } ?>
                                 </td>
 				</tr>
 						<?php endforeach; ?>

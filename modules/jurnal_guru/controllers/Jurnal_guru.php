@@ -163,12 +163,14 @@ class Jurnal_guru extends CI_Controller
 		redirect('jurnal_guru');
 	}
 
-	public function hapus($id)
+	public function hapus()
 	{
-            $this->jurnal_guru_model->delete($id);
+			$jurnal = $this->input->post('id_jurnal');
+			$jadwal = $this->input->post('id_jadwal');
+            $this->jurnal_guru_model->delete($jurnal);
 
             $this->session->set_flashdata('msg', suc_msg('Data berhasil dihapus.'));
-            redirect('jurnal_guru/lihat');
+            redirect('jurnal_guru/lihat/'.$jadwal);
 	}
 
 	public function ajax_form_kelas()
