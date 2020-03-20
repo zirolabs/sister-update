@@ -174,6 +174,23 @@ class Manajemen_guru_model extends CI_Model
 		return $get;
 	}
 
+	// Cek wali kelas atau guru biasa
+	function cek_wali($id)
+	{
+		$this->db->select('a.*');
+		$this->db->where('a.user_id', $id);
+		$this->db->from('master_kelas  a');
+		$query = $this->db->get();
+		if(!empty($query->row()))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	function get_data_row($id)
 	{
 		$this->db->select('a.*, b.*, c.kelas_id');

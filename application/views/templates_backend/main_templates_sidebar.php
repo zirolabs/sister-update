@@ -1,3 +1,11 @@
+<?php 
+// pengecekan wali kelas atau guru biasa
+    $this->load->model('manajemen_guru/manajemen_guru_model');
+    $this->login_wali = true;
+    if($this->session->userdata('login_level') == 'guru'){
+        $this->login_wali = $this->manajemen_guru_model->cek_wali($this->session->userdata('login_uid'));
+    }
+?>
 <section class="sidebar">
     <div class="user-panel">
         <div class="pull-left image">
@@ -206,7 +214,7 @@
                 </li>
             <?php } ?>
             <!-- End Of menu pelanggaran siswa -->
-            <?php if(!in_array($login_level,array('user kantin'))){ ?>
+            <?php if((!in_array($login_level,array('user kantin')))&&$this->login_wali==true){ ?>
                 <li class="treeview <?=@$page_active == 'laporan' ? 'active' : ''?>">
                     <a href="#">
                         <i class="fa fa-check"></i>
