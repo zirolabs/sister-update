@@ -32,6 +32,13 @@ class Mata_pelajaran extends CI_Controller
 	{
 		$param['sekolah']		 = $this->input->get('sekolah');
 		$param['kelas']			 = $this->input->get('kelas');
+
+		if($this->login_level == 'siswa'){
+			$this->load->model('manajemen_siswa/manajemen_siswa_model');
+			$kelas = $this->manajemen_siswa_model->get_data_row($this->login_uid);
+			$param['kelas']	= $kelas->kelas_id;
+		}
+
 		$param['mata_pelajaran'] = $this->input->get('mata_pelajaran');
 		$param['keyword']		 = $this->input->get('q');
 		$limit 				= 25;

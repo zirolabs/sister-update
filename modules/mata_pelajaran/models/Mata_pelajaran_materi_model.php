@@ -38,8 +38,8 @@ class Mata_pelajaran_materi_model extends CI_Model
 
 			if(!empty($param['kelas']))
 			{
-				$this->db->where('x.kelas_id', $param['kelas']);
-				$this->db->join('mata_pelajaran_materi_kelas x', 'x.materi_id = a.materi_id');
+				$this->db->where('y.kelas_id', $param['kelas']);
+				$this->db->join('mata_pelajaran_materi_kelas y', 'y.materi_id = a.materi_id');
 			}
 
 		}
