@@ -17,7 +17,8 @@
 				<hr/>
 				<form class="form-horizontal" method="POST" action="<?=site_url('jurnal_guru/submit')?>" enctype="multipart/form-data">
 					<div class="form-group">
-                                            <input type="hidden" name="id" value="<?=$data->jadwal_id?>">
+                        <input type="hidden" name="id" value="<?=$data->jadwal_id?>">
+                        <input type="hidden" name="hari" value="<?=$data->hari?>">
 				        <label class="col-md-4 control-label">Sekolah</label>
 				        <div class="col-md-5">
 				        	<p class="form-control-static"><?=$data->sekolah?></p>

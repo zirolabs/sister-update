@@ -109,8 +109,8 @@ class Jurnal_guru extends CI_Controller
 		$param['sekolah']	= $this->input->get('sekolah');
 		$param['kelas']		= $this->input->get('kelas_id');
 		$param['keyword']	= $this->input->get('q');
-                $param['hari']		= $this->input->get('hari');
-		$limit 			= 25;
+        $param['hari']		= $this->input->get('hari');
+		$limit 				= 25;
 		$uri_segment		= 3;
              
 		$filter = array(
@@ -145,22 +145,57 @@ class Jurnal_guru extends CI_Controller
 		$this->templates->load('main_templates', $param);
 	}
 
+	public function laporan()
+	{
+		$param['sekolah']	= $this->input->get('sekolah');
+		$param['kelas']		= $this->input->get('kelas_id');
+		$param['keyword']	= $this->input->get('q');
+        $param['hari']		= $this->input->get('hari');
+		$limit 				= 200;
+		$uri_segment		= 3;
+             
+		$filter = array(
+                    'limit'	=> $limit,
+                    'offset'	=> $this->uri->segment($uri_segment),
+                    'keyword'	=> $param['keyword'],
+                    'sekolah'	=> $param['sekolah'],
+                    'kelas'	=> $param['kelas']
+		);
+		$param['data'] = $this->jurnal_guru_model->get_data_laporan_jurnal($filter)->result();
+		unset($filter['limit']);
+		unset($filter['offset']);
+                $total_rows                 = $this->jurnal_guru_model->get_data_jurnal($filter)->num_rows();
+		$param['pagination']        = paging('jurnal_guru/laporan', $total_rows, $limit, $uri_segment);
+		$param['main_content']		= 'jurnal_guru/table_2';
+		$param['page_active'] 		= $this->page_active;
+		$param['sub_page_active'] 	= $this->sub_page_active;
+		$this->templates->load('main_templates', $param);
+	}
+
 	public function submit($id = '')
 	{
+		date_default_timezone_set('ASIA/JAKARTA');
 		$data_post = $this->input->post();
+		$data_post['tanggal'] = date("Y-m-d\TH:i:sP");
 		$this->form_validation->set_rules('isi_materi', 'Materi', 'required');
 		$this->form_validation->set_rules('target', 'Target Belajar', 'required');
+		if(day($this->input->post('hari'))!=date('D')){
+			$this->session->set_flashdata('msg', err_msg('Anda hanya bisa mengisi jurnal ketika hari mata pelajaran berlangsung !'));
+			redirect('jurnal_guru/form/' .$data_post["id"]);
+
+		}
 		if($this->form_validation->run() == false)
 		{
-                    $this->session->set_flashdata('msg', err_msg(validation_errors()));
-                    redirect('jurnal_guru/form/' .$data_post["id"]);
+					$this->session->set_flashdata('msg', err_msg(validation_errors()));
+					redirect('jurnal_guru/form/' .$data_post["id"]);
 		}
 		else
 		{
-                    $this->jurnal_guru_model->insert($data_post);
-                    $this->session->set_flashdata('msg', suc_msg('Data berhasil diperbaharui.'));
+					$this->jurnal_guru_model->insert($data_post);
+					$this->session->set_flashdata('msg', suc_msg('Data berhasil diperbaharui.'));
 		}
 		redirect('jurnal_guru');
+
 	}
 
 	public function hapus()

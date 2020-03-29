@@ -21,7 +21,7 @@
                         </div>
                     </div>                    
                 </div>
-        	<div class="col-md-3">
+        	    <div class="col-md-3">
 					<div class="form-group">
                         <label>&nbsp;</label>
                         <div class="input-group">
@@ -34,6 +34,18 @@
                         </div>
                     </div>
                 </div>
+                <?php if(in_array($login_level,array('operator sekolah','administrator'))){ ?>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <div class="input-group">
+                            <a href="<?=site_url('jurnal_guru/laporan')?>" class="btn btn-info">
+                               Laporan Jurnal
+                            </a>
+                        </div>
+                    </div>                    
+                </div>
+                <?php } ?>
             </div>
         </form>
         <hr/>
@@ -45,6 +57,7 @@
                                         <th class="col-md-2">Jam Mulai</th>
                                         <th class="col-md-2">Jam Akhir</th>
                                         <th class="col-md-2">Nama Pelajaran</th>
+                                        <th class="col-md-2">Kelas</th>
                                         <th class="col-md-2">Lihat Jurnal</th>
                                         <th class="col-md-2">Isi Jurnal</th>
                                     </tr>
@@ -60,6 +73,9 @@
                                 <td><?=$c->jam_akhir?></td>
                                 <td>
                                     <?=$c->nama_mata_pelajaran?>
+                                </td>
+                                <td>
+                                    <?=$c->kelas?>
                                 </td>
                                 <td>
                                     <a href="<?=site_url('jurnal_guru/lihat/'. $c->jadwal_id)?>" class="btn btn-default btn-xs" title="Lihat Jurnal">
