@@ -26,7 +26,6 @@ class Jurnal_guru_model extends CI_Model {
 
             if (!empty($param['keyword'])) {
                 $this->db->like('b.nama', $param['keyword']);
-//				$this->db->or_like('b.nis', $param['keyword']);
             }
 
             if (!empty($param['sekolah'])) {
@@ -102,7 +101,7 @@ class Jurnal_guru_model extends CI_Model {
         $this->db->select("
 			a.*, 
 			b.nama as nama_mata_pelajaran, 
-                        g.nama as sekolah,
+            g.nama as sekolah,
 			c.nama as nama_guru,
 			d.nip as nip_guru,
 			CONCAT(e.jenjang, ' ', f.nama, ' ', e.nama) AS kelas
@@ -167,6 +166,105 @@ class Jurnal_guru_model extends CI_Model {
         $this->db->join('master_jurusan f', 'f.jurusan_id = e.jurusan_id');
 
         $this->db->where('jadwal_id', $id);
+		if($level_user == 'kepala sekolah') {
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = e.sekolah_id');
+		} elseif($level_user == 'operator sekolah') {
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_operator x', 'x.sekolah_id = e.sekolah_id');
+		} elseif($level_user == 'guru') {
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_guru x', 'x.sekolah_id = e.sekolah_id');
+		}
+		$get = $this->db->get();
+		return $get;
+
+	}
+	
+	function get_data_jurnal() {
+        $level_user = $this->session->userdata('login_level');
+		$id_user = $this->session->userdata('login_uid');
+		if (!empty($param)) {
+            if (!empty($param['limit'])) {
+                if (!empty($param['offset'])) {
+                    $this->db->limit($param['limit'], $param['offset']);
+                } else {
+                    $this->db->limit($param['limit']);
+                }
+            }
+
+            if (!empty($param['keyword'])) {
+                $this->db->like('b.nama', $param['keyword']);
+            }
+
+            if (!empty($param['sekolah'])) {
+                $this->db->where('a.sekolah_id', $param['sekolah']);
+            }
+
+            if (!empty($param['kelas'])) {
+                $this->db->where('a.kelas_id', $param['kelas']);
+            }
+
+            if (isset($param['bulan'])) {
+                $this->db->where('MONTH(a.tanggal)', $param['bulan']);
+			}
+			
+			if (isset($param['tahun'])) {
+                $this->db->where('YEAR(a.tanggal)', $param['tahun']);
+            }
+
+            if (!empty($param['user_id'])) {
+                $this->db->where('a.user_id', $param['user_id']);
+            }
+
+            if (!empty($param['kelas_id'])) {
+                $this->db->where('a.kelas_id', $param['kelas_id']);
+            }
+
+            if (!empty($param['kepala sekolah'])) {
+                $level_user = 'kepala sekolah';
+                $id_user = $param['kepala sekolah'];
+            }
+
+            if (!empty($param['operator sekolah'])) {
+                $level_user = 'operator sekolah';
+                $id_user = $param['operator sekolah'];
+            }
+
+            if (!empty($param['guru'])) {
+                $level_user = 'guru';
+                $id_user = $param['guru'];
+            }
+		}
+		
+        $this->db->select("
+			a.*, 
+			b.nama as nama_mata_pelajaran, 
+                        g.nama as sekolah,
+			c.nama as nama_guru,
+			d.nip as nip_guru,
+                        j.id_jurnal,
+                        j.id_jadwal,
+                        j.materi,
+                        j.target,
+                        j.siswa_hadir,
+                        j.siswa_ijin,
+                        j.siswa_alpa,
+                        j.keterangan,
+                        j.tanggal,
+			CONCAT(e.jenjang, ' ', f.nama, ' ', e.nama) AS kelas
+		");
+        $this->db->order_by('j.tanggal','asc');
+        $this->db->order_by('a.jam_mulai','desc');
+        $this->db->from('jadwal_pelajaran a');
+        $this->db->join('jurnal_guru j', 'a.jadwal_id=j.id_jadwal', 'left');
+        $this->db->join('master_mata_pelajaran b', 'a.mata_pelajaran_id = b.mata_pelajaran_id');
+        $this->db->join('user c', 'c.user_id = a.user_id');
+        $this->db->join('user_guru d', 'd.user_id = c.user_id');
+        $this->db->join('profil_sekolah g', 'g.sekolah_id = d.sekolah_id');
+        $this->db->join('master_kelas e', 'e.kelas_id = a.kelas_id');
+        $this->db->join('master_jurusan f', 'f.jurusan_id = e.jurusan_id');
+
 		if($level_user == 'kepala sekolah') {
 			$this->db->where('x.user_id', $id_user);
 			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = e.sekolah_id');

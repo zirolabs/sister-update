@@ -3,6 +3,9 @@
     	<h3 class="box-title">
             <i class="fa fa-circle-o"></i>&nbsp;&nbsp;&nbsp;Jurnal Guru
         </h3>
+        <a href="<?=site_url('jurnal_guru/laporan')?>" class="btn btn-info" style="float: right">
+            Laporan Jurnal
+        </a>
     </div>
     <div class="box-body">
         <form method="GET" action="<?=site_url('jurnal_guru')?>">
@@ -39,9 +42,7 @@
                     <div class="form-group">
                         <label>&nbsp;</label>
                         <div class="input-group">
-                            <a href="<?=site_url('jurnal_guru/laporan')?>" class="btn btn-info">
-                               Laporan Jurnal
-                            </a>
+                           
                         </div>
                     </div>                    
                 </div>
@@ -52,15 +53,15 @@
         <div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
 				<thead>
-                                    <tr>
-                                        <th class="col-md-2">Hari</th>
-                                        <th class="col-md-2">Jam Mulai</th>
-                                        <th class="col-md-2">Jam Akhir</th>
-                                        <th class="col-md-2">Nama Pelajaran</th>
-                                        <th class="col-md-2">Kelas</th>
-                                        <th class="col-md-2">Lihat Jurnal</th>
-                                        <th class="col-md-2">Isi Jurnal</th>
-                                    </tr>
+                    <tr>
+                        <th class="col-md-2">Hari</th>
+                        <th class="col-md-2">Jam Mulai</th>
+                        <th class="col-md-2">Jam Akhir</th>
+                        <th class="col-md-2">Nama Pelajaran</th>
+                        <th class="col-md-2">Kelas</th>
+                        <th class="col-md-2">Lihat Jurnal</th>
+                        <th class="col-md-2">Isi Jurnal</th>
+                    </tr>
 				</thead>
 				<tbody>
 				<?php if(!empty($data)){ ?>

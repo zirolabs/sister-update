@@ -34,8 +34,8 @@ class Jurnal_guru extends CI_Controller
 		$param['sekolah']	= $this->input->get('sekolah');
 		$param['kelas']		= $this->input->get('kelas_id');
 		$param['keyword']	= $this->input->get('q');
-                $param['hari']		= $this->input->get('hari');
-		$limit 			= 25;
+        $param['hari']		= $this->input->get('hari');
+		$limit 				= 25;
 		$uri_segment		= 3;
              
 		$filter = array(
@@ -45,13 +45,11 @@ class Jurnal_guru extends CI_Controller
                     'sekolah'	=> $param['sekolah'],
                     'kelas'	=> $param['kelas']
 		);
-                $param['url_param']	= http_build_query(array(
+        $param['url_param']	= http_build_query(array(
 			'sekolah'	=> $param['sekolah'],
 			'kelas'		=> $param['kelas'],
 			'hari'		=> $param['hari'],
 		));
-//                print_r($param['sekolah']);
-//                die;
 		$param['data']	= $this->jurnal_guru_model->get_data($filter)->result();
 
 		unset($filter['limit']);
@@ -71,8 +69,6 @@ class Jurnal_guru extends CI_Controller
 		$param['url_param']	= http_build_query($param);
 		$param['msg']		= $this->session->flashdata('msg');
 		$param['id']		= $id;
-//                print_r($this->login_uid);
-//                die;
 		$last_data 	= $this->session->flashdata('last_data');
 		if(!empty($last_data))
 		{
@@ -150,23 +146,58 @@ class Jurnal_guru extends CI_Controller
 		$param['sekolah']	= $this->input->get('sekolah');
 		$param['kelas']		= $this->input->get('kelas_id');
 		$param['keyword']	= $this->input->get('q');
-        $param['hari']		= $this->input->get('hari');
-		$limit 				= 200;
+		$param['hari']		= $this->input->get('hari');
+		$param['bulan']		= $this->input->get('bulan');
+		
+		$limit 				= 25;
 		$uri_segment		= 3;
-             
+
+		$param['bulan']		= $this->input->get('bulan');
+		if(empty($param['bulan']))
+		{
+			$param['bulan'] = date('m');
+		}
+
+		$param['tahun']	= $this->input->get('tahun');
+		if(empty($param['tahun']))
+		{
+			$param['tahun'] = date('Y');
+		}
+
 		$filter = array(
-                    'limit'	=> $limit,
+                    'limit'		=> $limit,
                     'offset'	=> $this->uri->segment($uri_segment),
                     'keyword'	=> $param['keyword'],
                     'sekolah'	=> $param['sekolah'],
-                    'kelas'	=> $param['kelas']
+                    'kelas'		=> $param['kelas'],
+                    'tahun'		=> $param['tahun'],
+                    'bulan'		=> $param['bulan'],
 		);
-		$param['data'] = $this->jurnal_guru_model->get_data_laporan_jurnal($filter)->result();
-		unset($filter['limit']);
-		unset($filter['offset']);
-                $total_rows                 = $this->jurnal_guru_model->get_data_jurnal($filter)->num_rows();
-		$param['pagination']        = paging('jurnal_guru/laporan', $total_rows, $limit, $uri_segment);
-		$param['main_content']		= 'jurnal_guru/table_2';
+		$param['data']			= $this->jurnal_guru_model->get_data($filter)->result();
+		$param['data_jurnal']	= $this->jurnal_guru_model->get_data_jurnal($filter)->result();
+		$param['opt_sekolah']   = $this->profil_sekolah_model->get_opt('Semua Sekolah');
+		$param['main_content']	= 'jurnal_guru/table_2';
+
+		$param['sekolah_label']	= 'Semua Sekolah';
+		if(!empty($param['sekolah']))
+		{
+			foreach($param['opt_sekolah'] as $key => $c)
+			{
+				if($key == $param['sekolah'])
+				{
+					$param['sekolah_label'] = $c;
+					break;
+				}
+			}
+		}
+
+		$param['kelas_label']	= 'Semua Kelas';
+		if(!empty($param['kelas']))
+		{
+			$data_kelas = $this->pengaturan_kelas_model->get_data(array('kelas_id' => $param['kelas']))->row();
+			$param['kelas_label'] 	= $data_kelas->jenjang . ' ' . $data_kelas->nama_jurusan . ' ' . $data_kelas->nama;
+		}
+
 		$param['page_active'] 		= $this->page_active;
 		$param['sub_page_active'] 	= $this->sub_page_active;
 		$this->templates->load('main_templates', $param);
