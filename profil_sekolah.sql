@@ -1,0 +1,1 @@
+ALTER TABLE `profil_sekolah` ADD `mata_pelajaran_id` VARCHAR(255) NOT NULL AFTER `logo`;
