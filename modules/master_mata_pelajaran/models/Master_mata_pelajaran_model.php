@@ -134,11 +134,9 @@ class Master_mata_pelajaran_model extends CI_Model
 	}
 
 	function get_sekolah($id_sekolah){
-		
 		$this->db->select('x.mata_pelajaran_id');
 		$this->db->where('x.sekolah_id', $id_sekolah);
 		$get = $this->db->get('profil_sekolah x');
 		return $get->row()->mata_pelajaran_id;
-
 	}
 }

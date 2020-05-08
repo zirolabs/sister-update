@@ -372,6 +372,13 @@
                                 </a>
                             </li>
                         <?php } ?>
+                        <?php if(in_array($login_level, array('operator sekolah'))){ ?>
+                            <li class="<?=@$sub_page_active == 'master_mata_pelajaran/pengaturan' ? 'active' : ''?>"">
+                                <a href="<?=site_url('master_mata_pelajaran/pengaturan')?>">
+                                    <i class="fa fa-circle-o"></i> Mata Pelajaran Sekolah
+                                </a>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </li>
             <?php } ?>
