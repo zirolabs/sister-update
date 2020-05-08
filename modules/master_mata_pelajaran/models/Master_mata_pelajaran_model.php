@@ -73,8 +73,18 @@ class Master_mata_pelajaran_model extends CI_Model
 
 	function get_opt($add_on = '')
 	{
+		$level_user 	= $this->session->userdata('login_level');
+		$id_user 	 	= $this->session->userdata('login_uid');
+		$sekolah_id = $this->get_id_sekolah($id_user,$level_user);
+	
+		if($sekolah_id){
+			$mata_pelajaran = $this->get_sekolah($sekolah_id);
+			$this->db->where_in('a.mata_pelajaran_id',explode(',',$mata_pelajaran));
+		}
+			
 		$this->db->order_by('nama');
-		$this->db->from('master_mata_pelajaran');
+		$this->db->from('master_mata_pelajaran a');
+
 		$query = $this->db->get();
 
 		$result = array();
@@ -88,5 +98,47 @@ class Master_mata_pelajaran_model extends CI_Model
 			$result[$c->mata_pelajaran_id] = $c->nama;
 		}
 		return $result;
-	}	
+	}
+	
+	function get_id_sekolah($id_user,$level_user){
+		if($level_user == 'kepala sekolah')
+		{
+			$this->db->select('x.sekolah_id');
+			$this->db->where('x.user_id', $id_user);
+			$get = $this->db->get('user_kepala_sekolah x');
+			return $get->row()->sekolah_id;
+			
+		}
+		elseif($level_user == 'operator sekolah')
+		{
+			$this->db->select('x.sekolah_id');
+			$this->db->where('x.user_id', $id_user);
+			$get = $this->db->get('user_operator x');
+			return $get->row()->sekolah_id;
+
+		}
+		elseif($level_user == 'guru')
+		{
+			$this->db->select('x.sekolah_id');
+			$this->db->where('x.user_id', $id_user);
+			$get = $this->db->get('user_guru x');
+			return $get->row()->sekolah_id;
+		}
+		elseif($level_user == 'siswa')
+		{
+			$this->db->select('x.sekolah_id');
+			$this->db->where('x.user_id', $id_user);
+			$get = $this->db->get('user_siswa x');
+			return $get->row()->sekolah_id;
+		}
+	}
+
+	function get_sekolah($id_sekolah){
+		
+		$this->db->select('x.mata_pelajaran_id');
+		$this->db->where('x.sekolah_id', $id_sekolah);
+		$get = $this->db->get('profil_sekolah x');
+		return $get->row()->mata_pelajaran_id;
+
+	}
 }
