@@ -4,6 +4,9 @@ class Master_mata_pelajaran_model extends CI_Model
 {
 	function get_data($param = array())
 	{
+		$level_user 	= $this->session->userdata('login_level');
+		$id_user 	 	= $this->session->userdata('login_uid');
+
 		if(!empty($param))
 		{
 			if(!empty($param['limit']))
@@ -20,12 +23,40 @@ class Master_mata_pelajaran_model extends CI_Model
 
 			if(!empty($param['keyword']))
 			{
-				$this->db->where('a.nama', $param['keyword']);
+				$this->db->like('a.nama', $param['keyword']);
 			}
+
+			if(!empty($param['sekolah_id']))
+			{
+				$this->db->where('a.sekolah_id', $param['sekolah_id']);
+			}
+			
 		}
-		$this->db->select('a.*');
+		$this->db->select("a.*,b.sekolah_id,b.nama as nama_sekolah");
 		$this->db->order_by('a.nama');
 		$this->db->from('master_mata_pelajaran a');
+		$this->db->join('profil_sekolah b', 'b.sekolah_id = a.sekolah_id');
+		if($level_user == 'kepala sekolah')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = b.sekolah_id');
+		}
+		elseif($level_user == 'operator sekolah')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_operator x', 'x.sekolah_id = b.sekolah_id');
+		}
+		elseif($level_user == 'guru')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_guru x', 'x.sekolah_id = b.sekolah_id');			
+		}
+		elseif($level_user == 'siswa')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_guru x', 'x.sekolah_id = b.sekolah_id');			
+		}
+
 		$get = $this->db->get();
 		return $get;
 	}
@@ -75,16 +106,30 @@ class Master_mata_pelajaran_model extends CI_Model
 	{
 		$level_user 	= $this->session->userdata('login_level');
 		$id_user 	 	= $this->session->userdata('login_uid');
-		$sekolah_id = $this->get_id_sekolah($id_user,$level_user);
-	
-		if($sekolah_id){
-			$mata_pelajaran = $this->get_sekolah($sekolah_id);
-			$this->db->where_in('a.mata_pelajaran_id',explode(',',$mata_pelajaran));
-		}
-			
-		$this->db->order_by('nama');
+		$this->db->select("a.*,b.sekolah_id,b.nama as nama_sekolah");
+		$this->db->order_by('a.nama');
 		$this->db->from('master_mata_pelajaran a');
-
+		$this->db->join('profil_sekolah b', 'b.sekolah_id = a.sekolah_id');
+		if($level_user == 'kepala sekolah')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = b.sekolah_id');
+		}
+		elseif($level_user == 'operator sekolah')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_operator x', 'x.sekolah_id = b.sekolah_id');
+		}
+		elseif($level_user == 'guru')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_guru x', 'x.sekolah_id = b.sekolah_id');			
+		}
+		elseif($level_user == 'siswa')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_guru x', 'x.sekolah_id = b.sekolah_id');			
+		}
 		$query = $this->db->get();
 
 		$result = array();
@@ -100,43 +145,4 @@ class Master_mata_pelajaran_model extends CI_Model
 		return $result;
 	}
 	
-	function get_id_sekolah($id_user,$level_user){
-		if($level_user == 'kepala sekolah')
-		{
-			$this->db->select('x.sekolah_id');
-			$this->db->where('x.user_id', $id_user);
-			$get = $this->db->get('user_kepala_sekolah x');
-			return $get->row()->sekolah_id;
-			
-		}
-		elseif($level_user == 'operator sekolah')
-		{
-			$this->db->select('x.sekolah_id');
-			$this->db->where('x.user_id', $id_user);
-			$get = $this->db->get('user_operator x');
-			return $get->row()->sekolah_id;
-
-		}
-		elseif($level_user == 'guru')
-		{
-			$this->db->select('x.sekolah_id');
-			$this->db->where('x.user_id', $id_user);
-			$get = $this->db->get('user_guru x');
-			return $get->row()->sekolah_id;
-		}
-		elseif($level_user == 'siswa')
-		{
-			$this->db->select('x.sekolah_id');
-			$this->db->where('x.user_id', $id_user);
-			$get = $this->db->get('user_siswa x');
-			return $get->row()->sekolah_id;
-		}
-	}
-
-	function get_sekolah($id_sekolah){
-		$this->db->select('x.mata_pelajaran_id');
-		$this->db->where('x.sekolah_id', $id_sekolah);
-		$get = $this->db->get('profil_sekolah x');
-		return $get->row()->mata_pelajaran_id;
-	}
 }

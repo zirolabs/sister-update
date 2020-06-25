@@ -17,14 +17,20 @@
 				<hr/>
 				<form class="form-horizontal" method="POST" action="<?=site_url('master_mata_pelajaran/submit/' . $id)?>" enctype="multipart/form-data">
 					<div class="form-group">
+				        <label class="col-md-3 control-label">Sekolah</label>
+				        <div class="col-md-5">
+				        	<?=form_dropdown('sekolah_id', $opt_sekolah, @$data->sekolah_id, 'class="form-control"')?>
+				        </div>
+				    </div>
+					<div class="form-group">
 				        <label class="col-md-3 control-label">Nama</label>
-				        <div class="col-md-7">
+				        <div class="col-md-5">
 				            <input type="text" class="form-control" name="nama" value="<?=@$data->nama?>">
 				        </div>
 				    </div>
                     <hr/>
 				    <div class="form-group">
-				        <div class="col-md-12 text-right">
+				        <div class="col-md-7 text-right">
 				            <button type="submit" class="btn btn-default">
 				            	<i class="fa fa-check"></i>&nbsp;&nbsp;Simpan
 				            </button>

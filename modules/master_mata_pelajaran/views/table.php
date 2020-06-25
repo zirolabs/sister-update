@@ -6,25 +6,30 @@
     </div>
     <div class="box-body">
     	<div class="row">
-            <div class="col-md-9">
+            <div class="col-md-6">
                 <a href="<?=site_url('master_mata_pelajaran/form')?>" class="btn btn-default">
                     <i class="fa fa-plus hidden-xs"></i> Tambah
                 </a>
             </div>
-    		<div class="col-md-3">
-           		<form method="GET" action="<?=site_url('master_mata_pelajaran')?>">
-					<div class="form-group" style="margin-bottom: 0px;">
-                        <div class="input-group">
-                            <div class="input-group-control">
-	                            <input type="text" class="form-control input" placeholder="Pencarian.." name="q" value="<?=$keyword?>">
-                            </div>
-                            <span class="input-group-btn btn-right">
-                                <button class="btn btn-default" type="submit">Cari !</button>
-                            </span>
-                        </div>
-                    </div>
-           		</form>
+			<form method="GET" action="<?=site_url('master_mata_pelajaran')?>">
+			<div class="col-md-3">
+				<div class="form-group">
+					<?=form_dropdown('sekolah', $opt_sekolah, $sekolah, 'class="form-control"')?>
+				</div>  
+			</div>
+    		<div class="col-md-3"> 
+				<div class="form-group" style="margin-bottom: 0px;">                  
+					<div class="input-group">
+						<div class="input-group-control">
+							<input type="text" class="form-control input" placeholder="Pencarian.." name="q" value="<?=$keyword?>">
+						</div>
+						<span class="input-group-btn btn-right">
+							<button class="btn btn-default" type="submit">Cari !</button>
+						</span>
+					</div>
+				</div>
             </div>
+			</form>
         </div>
         <hr/>
         <div class="table-responsive">

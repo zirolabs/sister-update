@@ -20,6 +20,7 @@ class Master_mata_pelajaran extends CI_Controller
 		}
 
 		$this->load->model('master_mata_pelajaran_model');
+		$this->load->model('profil_sekolah/profil_sekolah_model');
 		$this->page_active 		= 'master';
 		$this->sub_page_active 	= 'master_mata_pelajaran';
 	}
@@ -28,12 +29,14 @@ class Master_mata_pelajaran extends CI_Controller
 	public function index()
 	{
 		$param['keyword']	= $this->input->get('q');
+		$param['sekolah']	= $this->input->get('sekolah');
 		$limit 				= 25;
 		$uri_segment		= 3;
-		$filter = array('limit'		=> $limit,
-						'offset'	=> $this->uri->segment($uri_segment),
-						'keyword'	=> $param['keyword']);
-
+		$filter = array('limit'			=> $limit,
+						'offset'		=> $this->uri->segment($uri_segment),
+						'keyword'		=> $param['keyword'],
+						'sekolah_id'	=> $param['sekolah']
+					);
 		$param['data']			= $this->master_mata_pelajaran_model->get_data($filter)->result();
 
 		unset($filter['limit']);
@@ -42,88 +45,17 @@ class Master_mata_pelajaran extends CI_Controller
 		$param['pagination']	= paging('master_mata_pelajaran/index', $total_rows, $limit, $uri_segment);
 
 		$param['main_content']	= 'master_mata_pelajaran/table';
+		$param['opt_sekolah']	= $this->profil_sekolah_model->get_opt('Semua Sekolah');
 		$param['page_active'] 	= $this->page_active;
 		$param['sub_page_active'] 	= $this->sub_page_active;
 		$this->templates->load('main_templates', $param);
-	}
-
-	public function pengaturan()
-	{
-		if($this->login_level == 'operator sekolah')
-		{
-			$limit 				= 1000;
-			$uri_segment		= 3;
-			$filter = array('limit'		=> $limit,
-							'offset'	=> $this->uri->segment($uri_segment),
-							);
-
-			$param['data']				= $this->master_mata_pelajaran_model->get_data($filter)->result();
-			$level_user 				= $this->session->userdata('login_level');
-			$id_user 	 				= $this->session->userdata('login_uid');
-			$sekolah_id 				= $this->master_mata_pelajaran_model->get_id_sekolah($id_user,$level_user);
-			$param['sekolah_id']		= $sekolah_id;
-			$param['sekolah'] 			= $this->master_mata_pelajaran_model->get_sekolah($sekolah_id);
-			$param['main_content']		= 'master_mata_pelajaran/pengaturan';
-			$param['page_active'] 		= 'pengaturan';
-			$param['sub_page_active'] 	= 'master_mata_pelajaran/pengaturan';
-			$this->templates->load('main_templates', $param);
-		}else{
-			redirect('home');
-		}
-	}
-
-	public function tambah_mapel()
-	{
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('nama', 'Mata Pelajaran', 'max_length[200]|required|is_unique[master_mata_pelajaran.nama]');
-		
-		if($this->form_validation->run())
-		{
-			$data['nama'] = $this->input->post('nama');
-			$this->master_mata_pelajaran_model->insert($data);
-			redirect('master_mata_pelajaran/pengaturan');
-		}else{
-			$limit 				= 1000;
-			$uri_segment		= 3;
-			$filter = array('limit'		=> $limit,
-							'offset'	=> $this->uri->segment($uri_segment),
-							);
-
-			$param['data']				= $this->master_mata_pelajaran_model->get_data($filter)->result();
-			$level_user 				= $this->session->userdata('login_level');
-			$id_user 	 				= $this->session->userdata('login_uid');
-			$sekolah_id 				= $this->master_mata_pelajaran_model->get_id_sekolah($id_user,$level_user);
-			$param['sekolah_id']		= $sekolah_id;
-			$param['sekolah'] 			= $this->master_mata_pelajaran_model->get_sekolah($sekolah_id);
-			$param['main_content']		= 'master_mata_pelajaran/pengaturan';
-			$param['page_active'] 		= 'pengaturan';
-			$param['sub_page_active'] 	= 'master_mata_pelajaran/pengaturan';
-			$this->templates->load('main_templates', $param);
-		}
-		
-	}
-
-	public function update_mapel()
-	{
-		$mapel_id 	= $this->input->post('mata_pelajaran_id');
-		$sekolah_id = $this->input->post('sekolah_id');
-		if($mapel_id){
-			$data['mata_pelajaran_id'] = implode(',',$mapel_id);
-			$this->load->model('profil_sekolah/profil_sekolah_model');
-			$this->profil_sekolah_model->update($data, $sekolah_id);
-			redirect('master_mata_pelajaran/pengaturan');
-		}else{
-			$data['mata_pelajaran_id'] = '';
-			$this->load->model('profil_sekolah/profil_sekolah_model');
-			$this->profil_sekolah_model->update($data, $sekolah_id);
-			redirect('master_mata_pelajaran/pengaturan');
-		}
 	}
 
 	public function form($id = '')
 	{
 		$param['msg']			= $this->session->flashdata('msg');
 		$param['id']			= $id;
+		$param['sekolah_id']	= $this->input->get('sekolah_id');
 
 		$last_data 	= $this->session->flashdata('last_data');
 		if(!empty($last_data))
@@ -138,6 +70,7 @@ class Master_mata_pelajaran extends CI_Controller
 			}
 		}
 
+		$param['opt_sekolah']	= $this->profil_sekolah_model->get_opt('Semua Sekolah');
 		$param['main_content']		= 'master_mata_pelajaran/form';
 		$param['page_active'] 		= $this->page_active;
 		$param['sub_page_active'] 	= $this->sub_page_active;
