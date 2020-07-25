@@ -84,6 +84,69 @@ class Manajemen_guru_model extends CI_Model
 		return $get;
 	}
 
+	function get_data_wali_kelas($param = array())
+	{
+		$level_user 	= $this->session->userdata('login_level');
+		$id_user 	 	= $this->session->userdata('login_uid');
+
+		if(!empty($param))
+		{
+
+			if(!empty($param['sekolah']))
+			{
+				$this->db->where('b.sekolah_id', $param['sekolah']);
+			}
+
+			if(!empty($param['kelas']))
+			{
+				$this->db->where_in('c.kelas_id', $param['kelas']);
+			}
+
+			if(!empty($param['kepala sekolah']))
+			{
+				$level_user = 'kepala sekolah';
+				$id_user 	= $param['kepala sekolah'];
+			}
+
+			if(!empty($param['operator sekolah']))
+			{
+				$level_user = 'operator sekolah';
+				$id_user 	= $param['operator sekolah'];
+			}
+
+			if(!empty($param['guru']))
+			{
+				$level_user = 'guru';
+				$id_user 	= $param['guru'];
+			}	 			
+		}
+
+		$this->db->select("
+			a.user_id,a.fcm
+		");
+		$this->db->order_by('a.nama');
+		$this->db->from('user a');
+		$this->db->join('user_guru b', 'b.user_id = a.user_id');
+		$this->db->join('master_kelas c', 'c.user_id = a.user_id', 'left');
+		$this->db->join('master_jurusan d', 'c.jurusan_id = d.jurusan_id', 'left');
+		$this->db->join('profil_sekolah e', 'b.sekolah_id = e.sekolah_id');
+
+		if($level_user == 'kepala sekolah')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_kepala_sekolah x', 'x.sekolah_id = e.sekolah_id');
+		}
+		elseif($level_user == 'operator sekolah')
+		{
+			$this->db->where('x.user_id', $id_user);
+			$this->db->join('user_operator x', 'x.sekolah_id = c.sekolah_id');
+		}
+
+		$get = $this->db->get();
+		return $get;
+	}
+
+
 	// menampilkan semua guru berdasakan filter
 	function get_data_guru($param = array())
 	{

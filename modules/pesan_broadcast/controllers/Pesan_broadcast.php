@@ -7,13 +7,7 @@ class Pesan_broadcast extends CI_Controller
 		parent::__construct();
 		$this->login_status 	= $this->session->userdata('login_status');
 		$this->login_uid 		= $this->session->userdata('login_uid');
-		$this->login_level 		= $this->session->userdata('login_level');
-		$cek = FALSE;
-		if($this->login_level == 'operator sekolah' || $this->login_level == 'administrator' || $this->login_level == 'guru' || $this->login_level == 'kepala sekolah'){
-			$cek = TRUE;
-		}
-
-		if($cek != TRUE)
+		if($this->login_status != 'ok')
 		{
 			$this->session->set_flashdata('msg', err_msg('Silahkan login untuk melanjutkan.'));
 			redirect(site_url('login'));
@@ -103,6 +97,29 @@ class Pesan_broadcast extends CI_Controller
 			);
 
 			$isi_notifikasi 	= substr($param_pesan['isi'], 0, 150);
+
+
+			// if(@$data_post['target_siswa'] == 'Y'){
+			// 	$filter = array(
+			// 		'kelas' => $this->input->post('kelas')
+			// 	);
+
+
+			// 	$get_data_siswa_fcm = $this->manajemen_siswa_model->get_data_fcm($filter)->result();
+			// 	$get_data_siswa_sms = $this->manajemen_siswa_model->get_data_sms($filter)->result();
+
+			// 	$this->fcm->insertNotifikasiSiswa($get_data_siswa_fcm, 'Pesan Broadcast untuk Siswa', $isi_notifikasi, 'pesan');	
+			// 	$this->sms->insertNotifikasiSiswa($get_data_siswa_sms, $isi_notifikasi);
+
+			// 	foreach ($get_data_siswa_fcm as $key => $x) {
+			// 		$this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $x->user_id, 'siswa');
+			// 	}
+			// 	foreach ($get_data_siswa_sms as $key => $x) {
+			// 		$this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $x->user_id, 'siswa');
+			// 	}
+			// }
+
+
 			foreach($data_post['kelas'] as $key => $c)
 			{
 				if(@$data_post['target_siswa'] == 'Y' || @$data_post['target_wali'] == 'Y')
@@ -167,9 +184,10 @@ class Pesan_broadcast extends CI_Controller
 				{
 				}
 			}
-			$this->session->set_flashdata('msg', suc_msg('Pesan berhasil dikirim.'));
+
+			// $this->session->set_flashdata('msg', suc_msg('Pesan berhasil dikirim.'));
 		}
-		redirect('pesan_broadcast');
+		// redirect('pesan_broadcast');
 	}
 
 	public function submitpegawai($id = '')
@@ -297,4 +315,92 @@ class Pesan_broadcast extends CI_Controller
 		$data['kelas'] = $this->pengaturan_kelas_model->get_opt('', $data_post['sekolah']);
 		$this->load->view('form_kelas', $data);
 	}
+
+	public function ajax_get_all()
+	{
+		$filter = array(
+			'kelas' => $this->input->post('kelas')
+		);
+		$get_data= $this->manajemen_siswa_model->get_data_all($filter)->result();
+		echo json_encode($get_data);
+	}
+
+	// ajax untuk wali kelas
+	public function ajax_get_guru()
+	{
+		$filter = array(
+			'kelas' => $this->input->post('kelas')
+		);
+		$get_data_wali = $this->manajemen_guru_model->get_data_wali_kelas($filter)->result();
+		echo json_encode($get_data_wali);
+	}
+
+	public function kirim_pesan_all(){
+		$user_id 		= $this->input->post('user_id');
+		$target_siswa 	= $this->input->post('target_siswa');
+		$target_wali 	= $this->input->post('target_wali');
+		$fcm		 	= $this->input->post('fcm');
+		$fcm_ortu		= $this->input->post('fcm_ortu');
+		$param_pesan = array(
+			'user_id'		=> $this->login_uid,
+			'isi'			=> $this->input->post('pesan'),
+			'waktu_kirim'	=> date('Y-m-d H:i:s')
+		);
+		$isi_notifikasi 	= substr($param_pesan['isi'], 0, 150);
+
+		if($target_siswa == 'Y')
+		{
+			if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $user_id, 'siswa'))
+			{
+				if(!empty($fcm))
+				{
+					$this->fcm->insertNotifikasiUser($user_id, 'Pesan Broadcast untuk Siswa', $isi_notifikasi, $fcm, 'pesan');
+				}
+				else
+				{
+					$this->sms->insertNotifikasiUser($user_id, $isi_notifikasi);
+				}
+			}
+		}
+
+		if($target_wali == 'Y')
+		{
+			if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $user_id, 'wali siswa'))
+			{
+				if(!empty($x->fcm_ortu))
+				{
+					$this->fcm->insertNotifikasiWali($user_id, 'Pesan Broadcast untuk Wali Murid', $isi_notifikasi, $fcm_ortu, 'pesan');
+				}								
+				else
+				{
+					$this->sms->insertNotifikasiWali($user_id, $isi_notifikasi);									
+				}
+			}
+		}
+	}
+
+	public function kirim_pesan_wali_kelas(){
+		$user_id 		= $this->input->post('user_id');
+		$fcm		 	= $this->input->post('fcm');
+		$param_pesan = array(
+			'user_id'		=> $this->login_uid,
+			'isi'			=> $this->input->post('pesan'),
+			'waktu_kirim'	=> date('Y-m-d H:i:s')
+		);
+		$isi_notifikasi 	= substr($param_pesan['isi'], 0, 150);
+
+		if($this->pesan_kotak_model->insert($param_pesan, $this->login_uid, $user_id , 'wali kelas'))
+		{
+			if(!empty($fcm))
+			{
+				$this->fcm->insertNotifikasiUser($user_id , 'Pesan Broadcast untuk Wali Kelas', $isi_notifikasi, $fcm, 'pesan');
+			}							
+			else
+			{
+				$this->sms->insertNotifikasiUser($user_id, $isi_notifikasi);								
+			}
+		}
+
+	}
+
 }
